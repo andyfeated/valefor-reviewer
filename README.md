@@ -23,3 +23,14 @@
 8. Display Pull Request Diffs to Client
 9. Send Pull Request Diffs to AI (Per file)
 
+# Problems and Limitations
+- Since we don't store results in db, same PR will have different AI reviews
+- We NEED to have a DB to have persisting reviews
+- Registration process
+  - Linking both Gitlab and Github accounts
+
+# Solutions
+- We can save ONLY reviews, no need auth
+
+# To Add
+- Docker + Docker Compose
