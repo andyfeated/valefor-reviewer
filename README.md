@@ -1,5 +1,6 @@
 # Review Workflow
 
+// outdated
 1. Client calls `getPullRequest`
 2. Pull Request Service creates GitHost from Factory
   - Gitlab (Strategy)
@@ -33,4 +34,8 @@
 - We can save ONLY reviews, no need auth
 
 # To Add
+- Nest Server (Done)
+- Vue Client (Done)
+- OAuth with PKCE
 - Docker + Docker Compose
+- Unit tests

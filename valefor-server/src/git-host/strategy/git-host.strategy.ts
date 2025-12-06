@@ -1,4 +1,4 @@
 export interface GitHostStrategy {
-  isPublicRepo(prUrl: string): boolean
-  buildOAuthUrl(): void
+  isPublicRepo(prUrl: string): boolean;
+  exhangeCodeForToken(): void;
 }
