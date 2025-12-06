@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { GithubOAuthStrategy } from './providers/github-oauth.strategy';
-import { GitlabOAuthStrategy } from './providers/gitlab-oauth.strategy';
-import { OAuthStrategy } from './providers/oauth.interface';
+import { GithubOAuthStrategy } from './strategy/github-oauth.strategy';
+import { GitlabOAuthStrategy } from './strategy/gitlab-oauth.strategy';
+import { OAuthStrategy } from './strategy/oauth.interface';
 
 @Injectable()
 export class OAuthFactory {
