@@ -1,0 +1,27 @@
+services:
+  server:
+    build: 
+      context: ./valefor-server
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./valefor-server/.env
+    environment: 
+      - NODE_ENV=development
+    volumes:
+      - ./valefor-server/src:/app/src
+  client:
+    build:
+      context: ./valefor-client
+      dockerfile: Dockerfile
+    ports:
+      - '4000:4000'
+    env_file:
+      - ./valefor-client/.env
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./valefor-client/src:/app/src
+
+

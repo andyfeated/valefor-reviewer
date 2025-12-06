@@ -39,3 +39,9 @@
 - OAuth with PKCE
 - Docker + Docker Compose
 - Unit tests
+
+# Tips
+- Docker
+  - When installing new dependencies, need to run
+    `docker compose build --no-cache && docker compose up`
+    - Can try without no cache
