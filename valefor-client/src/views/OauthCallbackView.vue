@@ -15,7 +15,7 @@ onMounted(async () => {
   const { provider } = JSON.parse(atob(state))
   const codeVerifer = localStorage.getItem(`${provider}_code_verifier`)
 
-  const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/oauth/exchange`, {
+  const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/oauth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code, state, code_verifier: codeVerifer }),

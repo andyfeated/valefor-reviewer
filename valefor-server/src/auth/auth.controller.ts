@@ -5,8 +5,8 @@ import { OAuthService } from './oauth/oauth.service';
 export class AuthController {
   constructor(private oauthService: OAuthService) {}
 
-  @Post('oauth/exchange')
-  async exchange(
+  @Post('oauth/login')
+  async login(
     @Body() body: { code: string; code_verifier: string; state: string },
   ) {
     const { code, code_verifier, state } = body;
@@ -14,10 +14,12 @@ export class AuthController {
     const decodedState = JSON.parse(atob(state));
     const provider = decodedState.provider;
 
-    return this.oauthService.exchangeCodeForToken({
+    const tokenData = await this.oauthService.exchangeCodeForToken({
       code,
       codeVerifier: code_verifier,
       provider,
     });
+
+    console.log(tokenData, 'here');
   }
 }

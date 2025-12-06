@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { OAuthProvider } from './oauth.interface';
+import { OAuthStrategy } from './oauth.interface';
 
 @Injectable()
-export class GitlabOAuthProvider implements OAuthProvider {
+export class GitlabOAuthStrategy implements OAuthStrategy {
   private tokenUrl = 'https://gitlab.com/oauth/token';
   private clientId = process.env.GITLAB_API_CLIENT_ID;
   private clientSecret = process.env.GITLAB_API_CLIENT_SECRET;

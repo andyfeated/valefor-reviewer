@@ -19,6 +19,6 @@ export class OAuthService {
       dto.codeVerifier,
     );
 
-    console.log(tokenData, 'here wohoo');
+    return tokenData;
   }
 }

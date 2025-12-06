@@ -1,16 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { GithubOAuthProvider } from './providers/github-oauth.provider';
-import { GitlabOAuthProvider } from './providers/gitlab-oauth.provider';
-import { OAuthProvider } from './providers/oauth.interface';
+import { GithubOAuthStrategy } from './providers/github-oauth.strategy';
+import { GitlabOAuthStrategy } from './providers/gitlab-oauth.strategy';
+import { OAuthStrategy } from './providers/oauth.interface';
 
 @Injectable()
 export class OAuthFactory {
   constructor(
-    private githubProvider: GithubOAuthProvider,
-    private gitlabProvider: GitlabOAuthProvider,
+    private githubProvider: GithubOAuthStrategy,
+    private gitlabProvider: GitlabOAuthStrategy,
   ) {}
 
-  get(provider: string): OAuthProvider {
+  get(provider: string): OAuthStrategy {
     switch (provider) {
       case 'github':
         return this.githubProvider;

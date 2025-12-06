@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { OAuthProvider } from './oauth.interface';
+import { OAuthStrategy } from './oauth.interface';
 
 @Injectable()
-export class GithubOAuthProvider implements OAuthProvider {
+export class GithubOAuthStrategy implements OAuthStrategy {
   exchangeToken(code: string, codeVerifier: string): Promise<unknown> {
     return Promise.resolve();
   }
