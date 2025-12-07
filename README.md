@@ -1,4 +1,3 @@
 ## Open-source, AI powered pull request reviewer 
 
-https://github.com/user-attachments/assets/7ec2c069-0c55-4d02-9a5c-0b87039a0fd1
-
+![valefor-preview](https://github.com/user-attachments/assets/ee69a93c-2d52-406f-81f1-2b05e3c6cf57)
