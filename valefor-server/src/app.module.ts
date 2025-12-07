@@ -3,6 +3,8 @@ import { PullRequestModule } from './pull-request/pull-request.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
+import { PrismaService } from './base/prisma.service';
+import { BaseModule } from './base/base.module';
 
 @Module({
   imports: [
@@ -10,8 +12,9 @@ import { HealthModule } from './health/health.module';
     PullRequestModule,
     ConfigModule.forRoot({ isGlobal: true }),
     HealthModule,
+    BaseModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [PrismaService],
 })
 export class AppModule {}

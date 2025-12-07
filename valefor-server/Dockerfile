@@ -12,4 +12,4 @@ COPY . .
 EXPOSE 3000
 
 # During container run
-CMD ["npm", "run", "start:dev"]
+CMD ["sh", "-c", "npm run db:deploy && npm run start:dev"]

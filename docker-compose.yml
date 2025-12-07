@@ -6,7 +6,8 @@ services:
     ports:
       - '3000:3000'
     env_file:
-      - ./valefor-server/.env
+      #use a different env here so that npx migrate will still work locally
+      - ./valefor-server/.env.prod
     environment: 
       - NODE_ENV=development
     volumes:
@@ -23,5 +24,17 @@ services:
       - NODE_ENV=development
     volumes:
       - ./valefor-client/src:/app/src
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=valefor
+      - POSTGRES_PASSWORD=valefor
+      - POSTGRES_DB=valefor
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
+volumes:
+  postgres_data:
 
