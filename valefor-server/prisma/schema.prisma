@@ -15,8 +15,28 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String
+  id              String          @id @default(cuid())
+  email           String          @unique
+  name            String
+  avatarUrl       String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  oauthIdentities OAuthIdentity[]
+}
+
+model OAuthIdentity {
+  id             Int    @id @default(autoincrement())
+  provider       String
+  providerUserId String
+  accessToken    String
+  refreshToken   String
+  expiresAt      Int?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  @@unique([provider, providerUserId])
 }

@@ -9,5 +9,5 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.js'
-export type * from './models/Test.js'
+export type * from './models/OAuthIdentity.js'
 export type * from './commonInputTypes.js'

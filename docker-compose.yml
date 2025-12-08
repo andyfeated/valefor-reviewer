@@ -12,6 +12,7 @@ services:
       - NODE_ENV=development
     volumes:
       - ./valefor-server/src:/app/src
+      - ./valefor-server/prisma:/app/prisma
   client:
     build:
       context: ./valefor-client
