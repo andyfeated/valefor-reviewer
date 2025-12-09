@@ -14,13 +14,17 @@ export class AuthController {
     const decodedState = JSON.parse(atob(state));
     const provider = decodedState.provider;
 
-    const tokenData = await this.oauthService.exchangeCodeForToken({
+    const tokenData: any = await this.oauthService.exchangeCodeForToken({
       code,
       codeVerifier: code_verifier,
       provider,
     });
 
-    console.log(tokenData, 'here');
-    // get user id from provider state
+    const idPayload = await this.oauthService.verifyIdToken(
+      tokenData.id_token,
+      provider,
+    );
+
+    console.log(idPayload, 'idpayload');
   }
 }

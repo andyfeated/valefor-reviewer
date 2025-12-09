@@ -3,8 +3,10 @@ import { OAuthStrategy } from './oauth.interface';
 
 @Injectable()
 export class GitlabOAuthStrategy implements OAuthStrategy {
+  readonly issuer = 'https://gitlab.com';
+  readonly clientId = process.env.GITLAB_API_CLIENT_ID;
+
   private tokenUrl = 'https://gitlab.com/oauth/token';
-  private clientId = process.env.GITLAB_API_CLIENT_ID;
   private clientSecret = process.env.GITLAB_API_CLIENT_SECRET;
   private redirectUri = process.env.GITLAB_API_REDIRECT_URI;
 

@@ -7,10 +7,8 @@ export class HealthController {
 
   @Get('')
   async ping() {
-    console.log('abcx');
     const count = await this.prismaService.user.count();
     const x = await this.prismaService.oAuthIdentity.findFirst();
-    console.log('here', x);
     return { status: 'okayy!!!?', timestamp: new Date() };
   }
 }
