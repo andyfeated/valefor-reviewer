@@ -5,9 +5,11 @@ import { OAuthFactory } from './oauth/oauth.factory';
 import { GithubOAuthStrategy } from './oauth/strategy/github-oauth.strategy';
 import { GitlabOAuthStrategy } from './oauth/strategy/gitlab-oauth.strategy';
 import { UserModule } from 'src/user/user.module';
+import { AuthService } from './auth.service';
 
 @Module({
   providers: [
+    AuthService,
     OAuthService,
     OAuthFactory,
     GithubOAuthStrategy,

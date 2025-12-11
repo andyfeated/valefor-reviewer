@@ -9,7 +9,6 @@ async function loginWithOauth(provider: ProviderName) {
   const oauthService = new OAuthService()
 
   const oauthUrl = await oauthService.buildOauthUrl(provider)
-  console.log(oauthUrl)
   window.location.href = oauthUrl
 }
 </script>
