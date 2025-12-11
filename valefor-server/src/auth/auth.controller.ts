@@ -50,6 +50,9 @@ export class AuthController {
       };
 
       const user = await this.userService.getOrCreateUser(dto);
+
+      console.log('user', user);
+      // create jwt with 4h lifespan
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }

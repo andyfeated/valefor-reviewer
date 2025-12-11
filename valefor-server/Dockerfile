@@ -1,6 +1,8 @@
-FROM node:24
+FROM node:24-slim
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y procps && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json .
 
