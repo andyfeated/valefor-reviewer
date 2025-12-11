@@ -5,14 +5,16 @@ import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
 import { PrismaService } from './base/prisma.service';
 import { BaseModule } from './base/base.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     AuthModule,
-    PullRequestModule,
+    BaseModule,
     ConfigModule.forRoot({ isGlobal: true }),
     HealthModule,
-    BaseModule,
+    PullRequestModule,
+    UserModule,
   ],
   controllers: [],
   providers: [PrismaService],

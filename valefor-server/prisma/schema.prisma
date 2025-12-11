@@ -25,12 +25,12 @@ model User {
 }
 
 model OAuthIdentity {
-  id             Int    @id @default(autoincrement())
+  id             String @id @default(cuid())
   provider       String
   providerUserId String
   accessToken    String
   refreshToken   String
-  expiresAt      Int?
+  expiresIn      Int?
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

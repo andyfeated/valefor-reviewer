@@ -27,34 +27,32 @@ export type AggregateOAuthIdentity = {
 }
 
 export type OAuthIdentityAvgAggregateOutputType = {
-  id: number | null
-  expiresAt: number | null
+  expiresIn: number | null
 }
 
 export type OAuthIdentitySumAggregateOutputType = {
-  id: number | null
-  expiresAt: number | null
+  expiresIn: number | null
 }
 
 export type OAuthIdentityMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   provider: string | null
   providerUserId: string | null
   accessToken: string | null
   refreshToken: string | null
-  expiresAt: number | null
+  expiresIn: number | null
   userId: string | null
   createdAt: Date | null
   updateAt: Date | null
 }
 
 export type OAuthIdentityMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   provider: string | null
   providerUserId: string | null
   accessToken: string | null
   refreshToken: string | null
-  expiresAt: number | null
+  expiresIn: number | null
   userId: string | null
   createdAt: Date | null
   updateAt: Date | null
@@ -66,7 +64,7 @@ export type OAuthIdentityCountAggregateOutputType = {
   providerUserId: number
   accessToken: number
   refreshToken: number
-  expiresAt: number
+  expiresIn: number
   userId: number
   createdAt: number
   updateAt: number
@@ -75,13 +73,11 @@ export type OAuthIdentityCountAggregateOutputType = {
 
 
 export type OAuthIdentityAvgAggregateInputType = {
-  id?: true
-  expiresAt?: true
+  expiresIn?: true
 }
 
 export type OAuthIdentitySumAggregateInputType = {
-  id?: true
-  expiresAt?: true
+  expiresIn?: true
 }
 
 export type OAuthIdentityMinAggregateInputType = {
@@ -90,7 +86,7 @@ export type OAuthIdentityMinAggregateInputType = {
   providerUserId?: true
   accessToken?: true
   refreshToken?: true
-  expiresAt?: true
+  expiresIn?: true
   userId?: true
   createdAt?: true
   updateAt?: true
@@ -102,7 +98,7 @@ export type OAuthIdentityMaxAggregateInputType = {
   providerUserId?: true
   accessToken?: true
   refreshToken?: true
-  expiresAt?: true
+  expiresIn?: true
   userId?: true
   createdAt?: true
   updateAt?: true
@@ -114,7 +110,7 @@ export type OAuthIdentityCountAggregateInputType = {
   providerUserId?: true
   accessToken?: true
   refreshToken?: true
-  expiresAt?: true
+  expiresIn?: true
   userId?: true
   createdAt?: true
   updateAt?: true
@@ -208,12 +204,12 @@ export type OAuthIdentityGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 export type OAuthIdentityGroupByOutputType = {
-  id: number
+  id: string
   provider: string
   providerUserId: string
   accessToken: string
   refreshToken: string
-  expiresAt: number | null
+  expiresIn: number | null
   userId: string
   createdAt: Date
   updateAt: Date
@@ -243,12 +239,12 @@ export type OAuthIdentityWhereInput = {
   AND?: Prisma.OAuthIdentityWhereInput | Prisma.OAuthIdentityWhereInput[]
   OR?: Prisma.OAuthIdentityWhereInput[]
   NOT?: Prisma.OAuthIdentityWhereInput | Prisma.OAuthIdentityWhereInput[]
-  id?: Prisma.IntFilter<"OAuthIdentity"> | number
+  id?: Prisma.StringFilter<"OAuthIdentity"> | string
   provider?: Prisma.StringFilter<"OAuthIdentity"> | string
   providerUserId?: Prisma.StringFilter<"OAuthIdentity"> | string
   accessToken?: Prisma.StringFilter<"OAuthIdentity"> | string
   refreshToken?: Prisma.StringFilter<"OAuthIdentity"> | string
-  expiresAt?: Prisma.IntNullableFilter<"OAuthIdentity"> | number | null
+  expiresIn?: Prisma.IntNullableFilter<"OAuthIdentity"> | number | null
   userId?: Prisma.StringFilter<"OAuthIdentity"> | string
   createdAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
   updateAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
@@ -261,7 +257,7 @@ export type OAuthIdentityOrderByWithRelationInput = {
   providerUserId?: Prisma.SortOrder
   accessToken?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
-  expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  expiresIn?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updateAt?: Prisma.SortOrder
@@ -269,7 +265,7 @@ export type OAuthIdentityOrderByWithRelationInput = {
 }
 
 export type OAuthIdentityWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   provider_providerUserId?: Prisma.OAuthIdentityProviderProviderUserIdCompoundUniqueInput
   AND?: Prisma.OAuthIdentityWhereInput | Prisma.OAuthIdentityWhereInput[]
   OR?: Prisma.OAuthIdentityWhereInput[]
@@ -278,7 +274,7 @@ export type OAuthIdentityWhereUniqueInput = Prisma.AtLeast<{
   providerUserId?: Prisma.StringFilter<"OAuthIdentity"> | string
   accessToken?: Prisma.StringFilter<"OAuthIdentity"> | string
   refreshToken?: Prisma.StringFilter<"OAuthIdentity"> | string
-  expiresAt?: Prisma.IntNullableFilter<"OAuthIdentity"> | number | null
+  expiresIn?: Prisma.IntNullableFilter<"OAuthIdentity"> | number | null
   userId?: Prisma.StringFilter<"OAuthIdentity"> | string
   createdAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
   updateAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
@@ -291,7 +287,7 @@ export type OAuthIdentityOrderByWithAggregationInput = {
   providerUserId?: Prisma.SortOrder
   accessToken?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
-  expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  expiresIn?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updateAt?: Prisma.SortOrder
@@ -306,92 +302,95 @@ export type OAuthIdentityScalarWhereWithAggregatesInput = {
   AND?: Prisma.OAuthIdentityScalarWhereWithAggregatesInput | Prisma.OAuthIdentityScalarWhereWithAggregatesInput[]
   OR?: Prisma.OAuthIdentityScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OAuthIdentityScalarWhereWithAggregatesInput | Prisma.OAuthIdentityScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"OAuthIdentity"> | number
+  id?: Prisma.StringWithAggregatesFilter<"OAuthIdentity"> | string
   provider?: Prisma.StringWithAggregatesFilter<"OAuthIdentity"> | string
   providerUserId?: Prisma.StringWithAggregatesFilter<"OAuthIdentity"> | string
   accessToken?: Prisma.StringWithAggregatesFilter<"OAuthIdentity"> | string
   refreshToken?: Prisma.StringWithAggregatesFilter<"OAuthIdentity"> | string
-  expiresAt?: Prisma.IntNullableWithAggregatesFilter<"OAuthIdentity"> | number | null
+  expiresIn?: Prisma.IntNullableWithAggregatesFilter<"OAuthIdentity"> | number | null
   userId?: Prisma.StringWithAggregatesFilter<"OAuthIdentity"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OAuthIdentity"> | Date | string
   updateAt?: Prisma.DateTimeWithAggregatesFilter<"OAuthIdentity"> | Date | string
 }
 
 export type OAuthIdentityCreateInput = {
+  id?: string
   provider: string
   providerUserId: string
   accessToken: string
   refreshToken: string
-  expiresAt?: number | null
+  expiresIn?: number | null
   createdAt?: Date | string
   updateAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutOauthIdentitiesInput
 }
 
 export type OAuthIdentityUncheckedCreateInput = {
-  id?: number
+  id?: string
   provider: string
   providerUserId: string
   accessToken: string
   refreshToken: string
-  expiresAt?: number | null
+  expiresIn?: number | null
   userId: string
   createdAt?: Date | string
   updateAt?: Date | string
 }
 
 export type OAuthIdentityUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   accessToken?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.StringFieldUpdateOperationsInput | string
-  expiresAt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiresIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutOauthIdentitiesNestedInput
 }
 
 export type OAuthIdentityUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   accessToken?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.StringFieldUpdateOperationsInput | string
-  expiresAt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiresIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OAuthIdentityCreateManyInput = {
-  id?: number
+  id?: string
   provider: string
   providerUserId: string
   accessToken: string
   refreshToken: string
-  expiresAt?: number | null
+  expiresIn?: number | null
   userId: string
   createdAt?: Date | string
   updateAt?: Date | string
 }
 
 export type OAuthIdentityUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   accessToken?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.StringFieldUpdateOperationsInput | string
-  expiresAt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiresIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OAuthIdentityUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   accessToken?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.StringFieldUpdateOperationsInput | string
-  expiresAt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiresIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -418,15 +417,14 @@ export type OAuthIdentityCountOrderByAggregateInput = {
   providerUserId?: Prisma.SortOrder
   accessToken?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
-  expiresAt?: Prisma.SortOrder
+  expiresIn?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updateAt?: Prisma.SortOrder
 }
 
 export type OAuthIdentityAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  expiresAt?: Prisma.SortOrder
+  expiresIn?: Prisma.SortOrder
 }
 
 export type OAuthIdentityMaxOrderByAggregateInput = {
@@ -435,7 +433,7 @@ export type OAuthIdentityMaxOrderByAggregateInput = {
   providerUserId?: Prisma.SortOrder
   accessToken?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
-  expiresAt?: Prisma.SortOrder
+  expiresIn?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updateAt?: Prisma.SortOrder
@@ -447,15 +445,14 @@ export type OAuthIdentityMinOrderByAggregateInput = {
   providerUserId?: Prisma.SortOrder
   accessToken?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
-  expiresAt?: Prisma.SortOrder
+  expiresIn?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updateAt?: Prisma.SortOrder
 }
 
 export type OAuthIdentitySumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  expiresAt?: Prisma.SortOrder
+  expiresIn?: Prisma.SortOrder
 }
 
 export type OAuthIdentityCreateNestedManyWithoutUserInput = {
@@ -508,31 +505,24 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type OAuthIdentityCreateWithoutUserInput = {
+  id?: string
   provider: string
   providerUserId: string
   accessToken: string
   refreshToken: string
-  expiresAt?: number | null
+  expiresIn?: number | null
   createdAt?: Date | string
   updateAt?: Date | string
 }
 
 export type OAuthIdentityUncheckedCreateWithoutUserInput = {
-  id?: number
+  id?: string
   provider: string
   providerUserId: string
   accessToken: string
   refreshToken: string
-  expiresAt?: number | null
+  expiresIn?: number | null
   createdAt?: Date | string
   updateAt?: Date | string
 }
@@ -567,56 +557,57 @@ export type OAuthIdentityScalarWhereInput = {
   AND?: Prisma.OAuthIdentityScalarWhereInput | Prisma.OAuthIdentityScalarWhereInput[]
   OR?: Prisma.OAuthIdentityScalarWhereInput[]
   NOT?: Prisma.OAuthIdentityScalarWhereInput | Prisma.OAuthIdentityScalarWhereInput[]
-  id?: Prisma.IntFilter<"OAuthIdentity"> | number
+  id?: Prisma.StringFilter<"OAuthIdentity"> | string
   provider?: Prisma.StringFilter<"OAuthIdentity"> | string
   providerUserId?: Prisma.StringFilter<"OAuthIdentity"> | string
   accessToken?: Prisma.StringFilter<"OAuthIdentity"> | string
   refreshToken?: Prisma.StringFilter<"OAuthIdentity"> | string
-  expiresAt?: Prisma.IntNullableFilter<"OAuthIdentity"> | number | null
+  expiresIn?: Prisma.IntNullableFilter<"OAuthIdentity"> | number | null
   userId?: Prisma.StringFilter<"OAuthIdentity"> | string
   createdAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
   updateAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
 }
 
 export type OAuthIdentityCreateManyUserInput = {
-  id?: number
+  id?: string
   provider: string
   providerUserId: string
   accessToken: string
   refreshToken: string
-  expiresAt?: number | null
+  expiresIn?: number | null
   createdAt?: Date | string
   updateAt?: Date | string
 }
 
 export type OAuthIdentityUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   accessToken?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.StringFieldUpdateOperationsInput | string
-  expiresAt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiresIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OAuthIdentityUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   accessToken?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.StringFieldUpdateOperationsInput | string
-  expiresAt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiresIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OAuthIdentityUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   accessToken?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.StringFieldUpdateOperationsInput | string
-  expiresAt?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiresIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -629,7 +620,7 @@ export type OAuthIdentitySelect<ExtArgs extends runtime.Types.Extensions.Interna
   providerUserId?: boolean
   accessToken?: boolean
   refreshToken?: boolean
-  expiresAt?: boolean
+  expiresIn?: boolean
   userId?: boolean
   createdAt?: boolean
   updateAt?: boolean
@@ -642,7 +633,7 @@ export type OAuthIdentitySelectCreateManyAndReturn<ExtArgs extends runtime.Types
   providerUserId?: boolean
   accessToken?: boolean
   refreshToken?: boolean
-  expiresAt?: boolean
+  expiresIn?: boolean
   userId?: boolean
   createdAt?: boolean
   updateAt?: boolean
@@ -655,7 +646,7 @@ export type OAuthIdentitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   providerUserId?: boolean
   accessToken?: boolean
   refreshToken?: boolean
-  expiresAt?: boolean
+  expiresIn?: boolean
   userId?: boolean
   createdAt?: boolean
   updateAt?: boolean
@@ -668,13 +659,13 @@ export type OAuthIdentitySelectScalar = {
   providerUserId?: boolean
   accessToken?: boolean
   refreshToken?: boolean
-  expiresAt?: boolean
+  expiresIn?: boolean
   userId?: boolean
   createdAt?: boolean
   updateAt?: boolean
 }
 
-export type OAuthIdentityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "provider" | "providerUserId" | "accessToken" | "refreshToken" | "expiresAt" | "userId" | "createdAt" | "updateAt", ExtArgs["result"]["oAuthIdentity"]>
+export type OAuthIdentityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "provider" | "providerUserId" | "accessToken" | "refreshToken" | "expiresIn" | "userId" | "createdAt" | "updateAt", ExtArgs["result"]["oAuthIdentity"]>
 export type OAuthIdentityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -691,12 +682,12 @@ export type $OAuthIdentityPayload<ExtArgs extends runtime.Types.Extensions.Inter
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     provider: string
     providerUserId: string
     accessToken: string
     refreshToken: string
-    expiresAt: number | null
+    expiresIn: number | null
     userId: string
     createdAt: Date
     updateAt: Date
@@ -1124,12 +1115,12 @@ export interface Prisma__OAuthIdentityClient<T, Null = never, ExtArgs extends ru
  * Fields of the OAuthIdentity model
  */
 export interface OAuthIdentityFieldRefs {
-  readonly id: Prisma.FieldRef<"OAuthIdentity", 'Int'>
+  readonly id: Prisma.FieldRef<"OAuthIdentity", 'String'>
   readonly provider: Prisma.FieldRef<"OAuthIdentity", 'String'>
   readonly providerUserId: Prisma.FieldRef<"OAuthIdentity", 'String'>
   readonly accessToken: Prisma.FieldRef<"OAuthIdentity", 'String'>
   readonly refreshToken: Prisma.FieldRef<"OAuthIdentity", 'String'>
-  readonly expiresAt: Prisma.FieldRef<"OAuthIdentity", 'Int'>
+  readonly expiresIn: Prisma.FieldRef<"OAuthIdentity", 'Int'>
   readonly userId: Prisma.FieldRef<"OAuthIdentity", 'String'>
   readonly createdAt: Prisma.FieldRef<"OAuthIdentity", 'DateTime'>
   readonly updateAt: Prisma.FieldRef<"OAuthIdentity", 'DateTime'>

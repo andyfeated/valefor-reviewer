@@ -89,7 +89,7 @@ export const OAuthIdentityScalarFieldEnum = {
   providerUserId: 'providerUserId',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
-  expiresAt: 'expiresAt',
+  expiresIn: 'expiresIn',
   userId: 'userId',
   createdAt: 'createdAt',
   updateAt: 'updateAt'

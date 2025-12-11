@@ -1,9 +1,20 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { OAuthService } from './oauth/oauth.service';
+import { UserService } from 'src/user/user.service';
+import { GetOrCreateAccountDto } from 'src/user/user.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private oauthService: OAuthService) {}
+  constructor(
+    private oauthService: OAuthService,
+    private userService: UserService,
+  ) {}
 
   @Post('oauth/login')
   async login(
@@ -11,20 +22,36 @@ export class AuthController {
   ) {
     const { code, code_verifier, state } = body;
 
-    const decodedState = JSON.parse(atob(state));
-    const provider = decodedState.provider;
+    try {
+      const decodedState = JSON.parse(atob(state));
+      const provider = decodedState.provider;
 
-    const tokenData: any = await this.oauthService.exchangeCodeForToken({
-      code,
-      codeVerifier: code_verifier,
-      provider,
-    });
+      const tokenData: any = await this.oauthService.exchangeCodeForToken({
+        code,
+        codeVerifier: code_verifier,
+        provider,
+      });
 
-    const idPayload = await this.oauthService.verifyIdToken(
-      tokenData.id_token,
-      provider,
-    );
+      const idPayload = await this.oauthService.verifyIdToken(
+        tokenData.id_token,
+        provider,
+      );
 
-    console.log(idPayload, 'idpayload');
+      const dto: GetOrCreateAccountDto = {
+        email: idPayload.email as string,
+        name: idPayload.name as string,
+        avatarUrl: idPayload.picture as string,
+
+        provider,
+        providerUserId: idPayload.sub,
+        accessToken: tokenData.access_token,
+        refreshToken: tokenData.refresh_token,
+        expiresIn: tokenData.expires_in,
+      };
+
+      const user = await this.userService.getOrCreateUser(dto);
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
