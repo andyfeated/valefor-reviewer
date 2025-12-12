@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -13,9 +22,21 @@ export class AuthController {
   ) {
     const { code, code_verifier, state } = body;
 
-    return this.authService.loginWithOauth(code, code_verifier, state, res);
+    const user = await this.authService.loginWithOauth(
+      code,
+      code_verifier,
+      state,
+      res,
+    );
+
+    return user;
   }
 
+  @UseGuards(AuthGuard)
   @Get('my-profile')
-  async myProfile() {}
+  async myProfile(@Req() req: any) {
+    const { sub } = req.user;
+
+    return this.authService.getUser(sub);
+  }
 }

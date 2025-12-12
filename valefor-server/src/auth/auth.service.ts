@@ -61,9 +61,13 @@ export class AuthService {
         maxAge: 1000 * 60 * 60 * 4,
       });
 
-      return { isCompleted: true };
+      return user;
     } catch (err) {
       throw new HttpException(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async getUser(id: string) {
+    return this.userService.findUserById(id);
   }
 }

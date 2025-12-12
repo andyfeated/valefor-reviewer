@@ -24,6 +24,10 @@ export class UserService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
+  async findUserById(id: string) {
+    return this.prisma.user.findUnique({ where: { id } });
+  }
+
   async createUser(data: { email: string; name: string; avatarUrl: string }) {
     return this.prisma.user.create({ data });
   }
@@ -69,7 +73,6 @@ export class UserService {
       provider,
       providerUserId,
     );
-    console.log('oauth identity', identity);
 
     if (identity) {
       await this.updateOAuthIdentityTokens(identity.id, {
