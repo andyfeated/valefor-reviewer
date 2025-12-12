@@ -35,6 +35,7 @@ export function useAuth() {
 
   async function checkAuth() {
     try {
+      console.log(3)
       const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/my-profile`, {
         credentials: 'include',
       })
@@ -45,6 +46,7 @@ export function useAuth() {
 
       const data = await res.json()
 
+      console.log(4)
       user.value = data
       isAuthenticated.value = true
     } catch (err) {

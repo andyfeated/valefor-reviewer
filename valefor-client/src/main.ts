@@ -7,8 +7,4 @@ const app = createApp(App)
 
 app.use(router)
 
-useAuth()
-  .checkAuth()
-  .finally(() => {
-    app.mount('#app')
-  })
+app.mount('#app')

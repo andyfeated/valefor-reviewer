@@ -26,12 +26,18 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to) => {
-  const { isAuthenticated } = useAuth()
+router.beforeEach(async (to) => {
+  const checkIfAuthorized = async () => {
+    const { isAuthenticated, checkAuth } = useAuth()
 
-  if (to.meta.requiresAuth && !isAuthenticated.value) {
-    return '/login'
+    await checkAuth()
+
+    if (to.meta.requiresAuth && !isAuthenticated.value) {
+      return '/login'
+    }
   }
+
+  await checkIfAuthorized()
 })
 
 export default router
