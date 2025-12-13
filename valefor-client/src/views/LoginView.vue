@@ -15,7 +15,7 @@ async function loginWithOauth(provider: ProviderName) {
 
 <template>
   <div
-    class="min-h-screen overflow-hidden text-white bg-[#0a0a0a] flex items-center justify-center relative"
+    class="min-h-screen overflow-hidden text-white bg-[var(--color-bg-primary)] flex items-center justify-center relative"
   >
     <div class="absolute inset-0">
       <motion.div
@@ -69,7 +69,7 @@ async function loginWithOauth(provider: ProviderName) {
           :initial="{ y: 20, opacity: 0 }"
           :animate="{ y: 0, opacity: 1 }"
           :transition="{ duration: 0.6, delay: 0.15, ease: [0.3, 1, 0.4, 1] }"
-          class="text-4xl font-bold mb-4 text-[#e8e8e8]"
+          class="text-4xl font-bold mb-4 text-[var(--color-text-primary)]"
         >
           Valefor AI Reviewer
         </motion.h1>
@@ -78,7 +78,7 @@ async function loginWithOauth(provider: ProviderName) {
           :initial="{ y: 20, opacity: 0 }"
           :animate="{ y: 0, opacity: 1 }"
           :transition="{ duration: 0.6, delay: 0.2, ease: [0.3, 1, 0.4, 1] }"
-          class="text-[#a8a8a8]"
+          class="text-[var(--color-text-secondary)]"
         >
           One-click PR reviews, Paste any URL, get instant AI feedback.
         </motion.p>
@@ -93,7 +93,7 @@ async function loginWithOauth(provider: ProviderName) {
         <motion.button
           :while-hover="{ scale: 1.03 }"
           :while-press="{ scale: 0.95 }"
-          class="relative w-full cursor-pointer flex items-center gap-3 px-4 py-4 bg-[#141414] border border-[#2a2a2a] hover:border-blue-500/50 rounded-xl text-[#e8e8e8] font-medium transition-all overflow-hidden"
+          class="relative w-full cursor-pointer flex items-center gap-3 px-4 py-4 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] hover:border-blue-500/50 rounded-xl text-[var(--color-text-primary)] font-medium transition-all overflow-hidden"
         >
           <motion.div
             :animate="{ x: ['-100%', '100%'] }"
@@ -102,14 +102,14 @@ async function loginWithOauth(provider: ProviderName) {
           />
           <GithubIcon class="w-5 h-5" />
           <span class="flex-1 text-left">Continue with Github</span>
-          <ArrowRightIcon class="w-4 h-4 text-[#6a6a6a] mr-1" />
+          <ArrowRightIcon class="w-4 h-4 text-[var(--color-text-dim)] mr-1" />
         </motion.button>
 
         <motion.button
           @click="loginWithOauth('gitlab')"
           :while-hover="{ scale: 1.03 }"
           :while-press="{ scale: 0.95 }"
-          class="relative w-full cursor-pointer flex items-center gap-3 px-4 py-4 bg-[#141414] border border-[#2a2a2a] hover:border-blue-500/50 rounded-xl text-[#e8e8e8] font-medium transition-all overflow-hidden"
+          class="relative w-full cursor-pointer flex items-center gap-3 px-4 py-4 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] hover:border-blue-500/50 rounded-xl text-[var(--color-text-primary)] font-medium transition-all overflow-hidden"
         >
           <motion.div
             :animate="{ x: ['-100%', '100%'] }"
@@ -118,7 +118,7 @@ async function loginWithOauth(provider: ProviderName) {
           />
           <GitlabIcon class="w-5 h-5" />
           <span class="flex-1 text-left">Continue with Gitlab</span>
-          <ArrowRightIcon class="w-4 h-4 text-[#6a6a6a] mr-1" />
+          <ArrowRightIcon class="w-4 h-4 text-[var(--color-text-dim)] mr-1" />
         </motion.button>
       </motion.div>
 
@@ -126,7 +126,7 @@ async function loginWithOauth(provider: ProviderName) {
         :initial="{ y: 20, opacity: 0 }"
         :animate="{ y: 0, opacity: 1 }"
         :transition="{ duration: 0.6, delay: 0.3, ease: [0.3, 1, 0.4, 1] }"
-        class="text-center text-[#6a6a6a]"
+        class="text-center text-[var(--color-text-dim)]"
       >
         <p>Secure OAuth • Limited scope • Read-only access</p>
       </motion.div>

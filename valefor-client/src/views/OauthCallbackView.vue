@@ -11,6 +11,7 @@ onMounted(async () => {
   const { code, state } = route.query
 
   if (!code || !state || Array.isArray(code) || Array.isArray(state)) {
+    router.push('/login')
     return
   }
 
@@ -24,7 +25,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <p>Oauth x</p>
+  <p>Loading...</p>
 </template>
 
 <style></style>

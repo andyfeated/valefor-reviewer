@@ -70,4 +70,14 @@ export class AuthService {
   async getUser(id: string) {
     return this.userService.findUserById(id);
   }
+
+  logout(res: Response) {
+    res.clearCookie('auth_token', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    });
+
+    return { isCompleted: true };
+  }
 }

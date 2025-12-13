@@ -32,6 +32,13 @@ export class AuthController {
     return user;
   }
 
+  @Post('logout')
+  logout(@Res() res: Response) {
+    this.authService.logout(res);
+
+    return res.json({ message: 'Logged out successfully' });
+  }
+
   @UseGuards(AuthGuard)
   @Get('my-profile')
   async myProfile(@Req() req: any) {

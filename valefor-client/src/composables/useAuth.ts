@@ -6,8 +6,14 @@ type User = {
   name: string
 }
 
+type Provider = {
+  providerUserId: string
+  provider: string
+}
+
 const user = ref<User | null>(null)
 const isAuthenticated = ref(false)
+const providers = ref<Provider[]>([])
 
 export function useAuth() {
   async function oauthLogin(code: string, state: string) {
@@ -31,11 +37,26 @@ export function useAuth() {
 
     user.value = data
     isAuthenticated.value = true
+    providers.value = data.oauthIdentities
+  }
+
+  async function logout() {
+    const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+
+    if (!res.ok) {
+      throw new Error('Logout failed')
+    }
+
+    user.value = null
+    isAuthenticated.value = false
+    providers.value = []
   }
 
   async function checkAuth() {
     try {
-      console.log(3)
       const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/my-profile`, {
         credentials: 'include',
       })
@@ -46,14 +67,15 @@ export function useAuth() {
 
       const data = await res.json()
 
-      console.log(4)
       user.value = data
       isAuthenticated.value = true
+      providers.value = data.oauthIdentities
     } catch (err) {
       user.value = null
       isAuthenticated.value = false
+      providers.value = []
     }
   }
 
-  return { oauthLogin, checkAuth, user, isAuthenticated }
+  return { oauthLogin, logout, checkAuth, user, isAuthenticated, providers }
 }

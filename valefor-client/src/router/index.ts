@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import OauthCallbackView from '@/views/OauthCallbackView.vue'
-import Home from '@/views/Home.vue'
+import Home from '@/views/HomeView.vue'
 import { useAuth } from '@/composables/useAuth'
 
 const router = createRouter({
@@ -33,7 +33,7 @@ router.beforeEach(async (to) => {
     await checkAuth()
 
     if (to.meta.requiresAuth && !isAuthenticated.value) {
-      return '/login'
+      router.push('/login')
     }
   }
 

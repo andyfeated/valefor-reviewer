@@ -21,15 +21,30 @@ export class UserService {
   async findUserByEmail(email: string) {
     if (!email) return null;
 
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        oauthIdentities: { select: { provider: true, providerUserId: true } },
+      },
+    });
   }
 
   async findUserById(id: string) {
-    return this.prisma.user.findUnique({ where: { id } });
+    return this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        oauthIdentities: { select: { provider: true, providerUserId: true } },
+      },
+    });
   }
 
   async createUser(data: { email: string; name: string; avatarUrl: string }) {
-    return this.prisma.user.create({ data });
+    return this.prisma.user.create({
+      data,
+      include: {
+        oauthIdentities: { select: { provider: true, providerUserId: true } },
+      },
+    });
   }
 
   async createOAuthIdentity(data: {
