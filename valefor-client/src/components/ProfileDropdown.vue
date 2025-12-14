@@ -12,7 +12,7 @@ import { AnimatePresence, motion } from 'motion-v'
 import { useAuth } from '@/composables/useAuth'
 import { useRouter } from 'vue-router'
 
-const { providers, logout } = useAuth()
+const { user, providers, logout } = useAuth()
 const router = useRouter()
 
 const isGitlabLinked = providers.value.some((p) => p.provider === 'gitlab')
@@ -55,13 +55,15 @@ onUnmounted(() => {
         :initial="{ opacity: 0, y: -10, scale: 0.95 }"
         :animate="{ opacity: 1, y: 0, scale: 1 }"
         :exit="{ opacity: 0, y: -10, scale: 0.95 }"
-        :transition="{ duration: 0.4, ease: [0.22, 1, 0.22, 1] }"
+        :transition="{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }"
         class="absolute right-0 mt-2 w-72 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-xl shadow-xl overflow-hidden z-50"
       >
         <div
           class="px-4 py-3 border-b border-[var(--color-border)] bg-[var(--color-bg-tertiary)] rounded-t-xl"
         >
-          <p class="text-sm font-semibold text-[var(--color-text-primary)]">Andy Banua</p>
+          <p class="text-sm font-semibold text-[var(--color-text-primary)]">
+            {{ user?.name }}
+          </p>
         </div>
 
         <div class="p-3">
