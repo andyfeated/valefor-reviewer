@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { SparklesIcon, ArrowRightIcon, GitlabIcon, GithubIcon } from 'lucide-vue-next'
+import { ClockIcon, SparklesIcon, ArrowRightIcon, GitlabIcon, GithubIcon } from 'lucide-vue-next'
 import ProfileDropdown from '../components/ProfileDropdown.vue'
 import { motion } from 'motion-v'
 import { ref } from 'vue'
 
 const prUrl = ref<string>('http://localhost:4000')
 const isAnalyzing = ref<boolean>(false)
+
+const recentReviews = [
+  { url: 'github.com/vercel/next.js/pull/1201', time: '2 hours ago', suggestions: 8 },
+  { url: 'gitlab.com/microsoft/vscode/pull/84523', time: '8 hours ago', suggestions: 2 },
+  { url: 'github.com/netflix/next.js/pull/4123', time: '2 hours ago', suggestions: 8 },
+  { url: 'gitlab.com/google/vscode/pull/12314', time: '8 hours ago', suggestions: 2 },
+]
 
 const submit = async (e: Event) => {
   e.preventDefault()
@@ -57,7 +64,7 @@ const submit = async (e: Event) => {
           Pull Request URL
         </label>
 
-        <div class="flex gap-3">
+        <div class="flex items-center gap-3">
           <div class="flex-1 relative">
             <input
               type="url"
@@ -87,7 +94,9 @@ const submit = async (e: Event) => {
                 class="w-5 h-5 border-3 border-white border-t-transparent rounded-full"
               />
             </div>
-            <div v-else class="flex gap-2">Analyze <ArrowRightIcon class="w-5 h-5" /></div>
+            <div v-else class="flex gap-3 items-center">
+              Analyze <ArrowRightIcon class="w-5 h-5" />
+            </div>
           </button>
         </div>
 
@@ -95,6 +104,47 @@ const submit = async (e: Event) => {
           Supports public and private repositories accessible by your connected account
         </p>
       </motion.form>
+
+      <motion.div
+        :initial="{ y: 20, opacity: 0 }"
+        :animate="{ y: 0, opacity: 1 }"
+        :transition="{
+          duration: 0.5,
+          delay: 0.2,
+          ease: [0.22, 1, 0.36, 1],
+        }"
+      >
+        <div class="flex items-center gap-2 mb-4">
+          <ClockIcon class="w-4 h-4 text-[var(--color-text-dim)]" />
+          <h3 class="font-semibold text-sm text-[var(--color-text-secondary)]">Recent Reviews</h3>
+        </div>
+
+        <motion.div
+          v-for="(item, index) in recentReviews"
+          :key="item.url"
+          :initial="{ x: -20, opacity: 0 }"
+          :animate="{ x: 0, opacity: 1 }"
+          :transition="{ duration: 0.5, delay: 0.3 + index * 0.05, ease: [0.22, 1, 0.36, 1] }"
+          class="cursor-pointer w-full flex items-center justify-between mb-3 p-4 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-border-bright)] hover:bg-[var(--color-bg-tertiary)] text-left group"
+        >
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-mono text-[var(--color-text-primary)] group-hover:text-blue-400">
+              {{ item.url }}
+            </p>
+            <p class="text-xs text-[var(--color-text-dim)] mt-2">{{ item.time }}</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span class="text-sm text-[var(--color-text-secondary)]"
+              >{{ item.suggestions }} suggestions
+            </span>
+          </div>
+
+          <ArrowRightIcon
+            class="w-4 h-4 text-[var(--color-text-dim)] group-hover:text-blue-400 ml-3"
+          />
+        </motion.div>
+      </motion.div>
     </div>
   </div>
 </template>
