@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { OAuthStrategy } from './oauth.interface';
 
 @Injectable()
@@ -30,6 +34,31 @@ export class GitlabOAuthStrategy implements OAuthStrategy {
       throw new BadRequestException(
         `Failed exchanging Gitlab code: ${res.statusText}`,
       );
+    }
+
+    return res.json();
+  }
+
+  async getNewAccessTokenFromProvider(refreshToken: string): Promise<any> {
+    const params = new URLSearchParams({
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+      redirect_uri: this.redirectUri,
+    });
+
+    const res = await fetch(this.tokenUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+      },
+      body: params,
+    });
+
+    if (!res.ok) {
+      throw new UnauthorizedException('Failed to refresh access token');
     }
 
     return res.json();

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ClockIcon, SparklesIcon, ArrowRightIcon, GitlabIcon, GithubIcon } from 'lucide-vue-next'
-import ProfileDropdown from '../components/ProfileDropdown.vue'
+import { ClockIcon, ArrowRightIcon, GitlabIcon, GithubIcon } from 'lucide-vue-next'
+import Navbar from '@/components/Navbar.vue'
 import { motion } from 'motion-v'
 import { ref } from 'vue'
 
-const prUrl = ref<string>('http://localhost:4000')
+const prUrl = ref<string>(
+  'https://gitlab.com/theoria-medical/se/tm-charteasy-server/-/merge_requests/3562',
+)
 const isAnalyzing = ref<boolean>(false)
 
 const recentReviews = [
@@ -15,28 +17,36 @@ const recentReviews = [
 ]
 
 const submit = async (e: Event) => {
-  e.preventDefault()
+  try {
+    e.preventDefault()
 
-  isAnalyzing.value = true
-  await new Promise((res) => setTimeout(res, 2000))
+    isAnalyzing.value = true
+    await new Promise((res) => setTimeout(res, 2000))
+
+    const url = new URL(prUrl.value)
+    const provider = url.host.replace('.com', '')
+
+    const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/review/${provider}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prUrl: prUrl.value }),
+    })
+
+    if (!res.ok) {
+      throw new Error('Logout failed')
+    }
+  } catch (err) {
+    console.error(err)
+  }
+
   isAnalyzing.value = false
 }
 </script>
 
 <template>
   <div class="min-h-screen bg-[var(--color-bg-primary)]">
-    <div class="border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-8 py-6">
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="p-2 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg">
-            <SparklesIcon class="w-5 h-5 text-white" />
-          </div>
-
-          <h1 class="text-2xl font-bold text-white">Valefor AI Reviewer</h1>
-        </div>
-        <ProfileDropdown />
-      </div>
-    </div>
+    <Navbar />
 
     <div class="max-w-4xl mx-auto px-8 py-16">
       <motion.div

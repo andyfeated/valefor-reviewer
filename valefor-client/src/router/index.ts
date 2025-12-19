@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import OauthCallbackView from '@/views/OauthCallbackView.vue'
 import Home from '@/views/HomeView.vue'
+import ReviewView from '@/views/ReviewView.vue'
 import { useAuth } from '@/composables/useAuth'
 
 const router = createRouter({
@@ -22,6 +23,11 @@ const router = createRouter({
       name: 'home',
       component: Home,
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/review/:id',
+      name: 'review',
+      component: ReviewView,
     },
   ],
 })

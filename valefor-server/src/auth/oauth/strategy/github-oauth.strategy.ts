@@ -9,4 +9,8 @@ export class GithubOAuthStrategy implements OAuthStrategy {
   exchangeToken(code: string, codeVerifier: string): Promise<unknown> {
     return Promise.resolve();
   }
+
+  async getNewAccessTokenFromProvider(refreshToken: string): Promise<any> {
+    return Promise.resolve();
+  }
 }

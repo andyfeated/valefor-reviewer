@@ -1,5 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { OAuthFactory } from './oauth.factory';
+import { OAuthIdentity } from 'src/generated/prisma/client';
+import { UserService } from 'src/user/user.service';
 
 export class ExchangeOAuthDto {
   provider: string;
@@ -9,7 +11,10 @@ export class ExchangeOAuthDto {
 
 @Injectable()
 export class OAuthService {
-  constructor(private factory: OAuthFactory) {}
+  constructor(
+    private factory: OAuthFactory,
+    private userService: UserService,
+  ) {}
 
   async exchangeCodeForToken(dto: ExchangeOAuthDto) {
     const oauthProvider = this.factory.get(dto.provider);
@@ -30,6 +35,7 @@ export class OAuthService {
       const oauthProvider = this.factory.get(provider);
       const issuer = oauthProvider.issuer;
 
+      // NOTE: Refactor to make clientId private
       const openIdWellKnown = `${issuer}/.well-known/openid-configuration`;
 
       const res = await fetch(openIdWellKnown);
@@ -46,5 +52,24 @@ export class OAuthService {
     } catch (err) {
       throw new UnauthorizedException('Failed to verify token');
     }
+  }
+
+  async refreshOAuthToken(oauthIdentity: OAuthIdentity, provider: string) {
+    const refreshToken = oauthIdentity.refreshToken;
+
+    if (!oauthIdentity.refreshToken) {
+      throw new UnauthorizedException('No refresh token found');
+    }
+
+    const oauthProvider = this.factory.get(provider);
+    const res = await oauthProvider.getNewAccessTokenFromProvider(refreshToken);
+
+    const { access_token, refresh_token, expires_in } = res;
+
+    await this.userService.updateOAuthIdentityTokens(oauthIdentity.id, {
+      accessToken: access_token,
+      refreshToken: refresh_token,
+      expiresIn: expires_in,
+    });
   }
 }

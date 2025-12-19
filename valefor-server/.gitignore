@@ -401,4 +401,4 @@ dist
 .serverless/**/*.zip
 README.md
 
-/generated/prisma
+src/generated/prisma/

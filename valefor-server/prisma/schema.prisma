@@ -28,7 +28,7 @@ model OAuthIdentity {
   id             String @id @default(cuid())
   provider       String
   providerUserId String
-  accessToken    String
+  accessToken    String // expires in 2 hours
   refreshToken   String
   expiresIn      Int?
 

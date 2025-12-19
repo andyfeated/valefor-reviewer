@@ -47,6 +47,12 @@ export class UserService {
     });
   }
 
+  async getOAuthIdentity(userId: string, provider: string) {
+    return this.prisma.oAuthIdentity.findFirst({
+      where: { userId, provider },
+    });
+  }
+
   async createOAuthIdentity(data: {
     userId: string;
     provider: string;
