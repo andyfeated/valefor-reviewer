@@ -69,7 +69,7 @@ export class OAuthService {
     await this.userService.updateOAuthIdentityTokens(oauthIdentity.id, {
       accessToken: access_token,
       refreshToken: refresh_token,
-      expiresIn: expires_in,
+      expiresIn: Math.floor(Date.now() / 1000) + expires_in,
     });
   }
 }

@@ -12,5 +12,7 @@ export class GithubStrategy implements GitHostStrategy {
     return { projectId: '', host: '', pullRequestId: '' };
   }
 
-  getPullRequest(prUrl: string) {}
+  async getPullRequest(prUrl: string): Promise<any> {
+    await Promise.resolve();
+  }
 }

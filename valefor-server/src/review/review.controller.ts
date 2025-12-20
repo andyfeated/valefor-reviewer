@@ -4,21 +4,27 @@ import {
   Controller,
   Param,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { OAuthTokenGuard } from 'src/auth/oauth/oauth.guard';
-import { GitHostFactory } from 'src/git-host/factory/git-host.factory';
+import { ReviewService } from './review.service';
+import express from 'express';
 
 @Controller('review')
 export class ReviewController {
+  constructor(private reviewService: ReviewService) {}
+
   @UseGuards(AuthGuard, OAuthTokenGuard)
   @Post(':githost')
   async review(
+    @Req() req: express.Request,
     @Param('githost') gitHost: string,
     @Body() body: { prUrl: string },
   ) {
     const { prUrl } = body;
+    const userId = req.user.sub;
 
     const prUrlObj = new URL(prUrl ?? null);
 
@@ -30,11 +36,6 @@ export class ReviewController {
       throw new BadRequestException('Invalid PR URL');
     }
 
-    const githost = new GitHostFactory().create(prUrl);
-
-    const { projectId, pullRequestId } =
-      githost.extractPullRequestDetailsFromUrl(prUrl);
-
-    console.log(projectId, pullRequestId);
+    await this.reviewService.reviewPullRequest(prUrl, userId);
   }
 }

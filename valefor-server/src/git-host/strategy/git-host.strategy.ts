@@ -11,5 +11,5 @@ export interface GitHostStrategy {
     projectId: string,
     pullRequestId: string,
     accessToken: string,
-  ): void;
+  ): Promise<any>;
 }

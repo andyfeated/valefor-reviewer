@@ -29,18 +29,22 @@ export class OAuthTokenGuard implements CanActivate {
       throw new BadRequestException('Invalid provider');
     }
 
-    const oauthIdentity = await this.userService.getOAuthIdentity(
-      userId,
-      provider,
-    );
+    try {
+      const oauthIdentity = await this.userService.getOAuthIdentity(
+        userId,
+        provider,
+      );
 
-    const expiresInMs = oauthIdentity.expiresIn * 1000;
+      const expiresInMs = oauthIdentity.expiresIn * 1000;
 
-    console.log('Expires at:', new Date(expiresInMs).toLocaleString());
-    console.log('Current time:', new Date().toLocaleString());
+      console.log('Current time:', new Date().toLocaleString());
+      console.log('Expires at:', new Date(expiresInMs).toLocaleString());
 
-    if (expiresInMs < new Date().getTime()) {
-      this.oauthService.refreshOAuthToken(oauthIdentity, provider);
+      if (expiresInMs < new Date().getTime()) {
+        this.oauthService.refreshOAuthToken(oauthIdentity, provider);
+      }
+    } catch (err) {
+      throw new UnauthorizedException(err);
     }
 
     return true;
