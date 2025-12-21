@@ -6,13 +6,18 @@ services:
     ports:
       - '3000:3000'
     env_file:
-      #use a different env here so that npx migrate will still work locally
+      # use a different env here so that npx migrate will still work locally
       - ./valefor-server/.env.prod
     environment: 
       - NODE_ENV=development
     volumes:
       - ./valefor-server/src:/app/src
       - ./valefor-server/prisma:/app/prisma
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
   client:
     build:
       context: ./valefor-client
@@ -35,7 +40,28 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U valefor"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  prisma-studio:
+    build:
+      context: ./valefor-server
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - ./valefor-server/prisma/:/app/prisma
+    command: npx prisma studio --port 5555 --browser none
+    ports:
+      - "5555:5555"
+    env_file:
+      - ./valefor-server/.env.prod
+    depends_on:
+      db:
+        condition: service_healthy
+      server:
+        condition: service_healthy
 volumes:
   postgres_data:
 

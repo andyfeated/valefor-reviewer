@@ -40,13 +40,10 @@ export class ReviewService {
         projectId,
       );
 
-      console.log('pr', normalizedPullRequest);
       const review = await this.createReview(normalizedPullRequest);
-      console.log('review', review);
 
       return review;
     } catch (err) {
-      console.log('err', err);
       throw new UnauthorizedException(err);
     }
   }
