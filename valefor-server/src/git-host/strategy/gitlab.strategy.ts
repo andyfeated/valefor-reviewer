@@ -43,6 +43,7 @@ export class GitlabStrategy implements GitHostStrategy {
     pr: any,
     prUrl: string,
     projectId: string,
+    userId: string,
   ): NormalizedPullRequest {
     let normalizedState: 'open' | 'closed' | 'merged';
     switch (pr.state) {
@@ -65,6 +66,8 @@ export class GitlabStrategy implements GitHostStrategy {
       providerPrIid: String(pr.iid),
       providerProjectId: String(pr.project_id),
       providerProjectIid: projectId,
+
+      userId,
 
       title: pr.title,
       description: pr.description ?? '',

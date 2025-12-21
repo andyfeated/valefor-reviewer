@@ -22,6 +22,7 @@ model User {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   oauthIdentities OAuthIdentity[]
+  reviews         Review[]
 }
 
 model OAuthIdentity {
@@ -50,6 +51,9 @@ model Review {
   providerProjectId  String
   providerProjectIid String
   headSha            String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   title          String
   description    String

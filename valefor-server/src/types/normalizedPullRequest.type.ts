@@ -5,6 +5,8 @@ export type NormalizedPullRequest = {
   providerProjectId: string;
   providerProjectIid: string;
 
+  userId: string;
+
   title: string;
   description: string;
   state: 'open' | 'closed' | 'merged';

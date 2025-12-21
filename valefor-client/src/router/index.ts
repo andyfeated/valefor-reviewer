@@ -28,6 +28,7 @@ const router = createRouter({
       path: '/review/:id',
       name: 'review',
       component: ReviewView,
+      meta: { requiresAuth: true },
     },
   ],
 })

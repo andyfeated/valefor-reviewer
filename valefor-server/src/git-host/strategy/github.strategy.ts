@@ -17,6 +17,7 @@ export class GithubStrategy implements GitHostStrategy {
     pulLRequest: any,
     prUrl: string,
     projectId: string,
+    userId: string,
   ): NormalizedPullRequest {
     return {} as NormalizedPullRequest;
   }

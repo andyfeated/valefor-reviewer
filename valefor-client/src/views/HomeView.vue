@@ -3,6 +3,9 @@ import { ClockIcon, ArrowRightIcon, GitlabIcon, GithubIcon } from 'lucide-vue-ne
 import Navbar from '@/components/Navbar.vue'
 import { motion } from 'motion-v'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const prUrl = ref<string>(
   'https://gitlab.com/theoria-medical/se/tm-charteasy-server/-/merge_requests/3562',
@@ -21,7 +24,6 @@ const submit = async (e: Event) => {
     e.preventDefault()
 
     isAnalyzing.value = true
-    await new Promise((res) => setTimeout(res, 2000))
 
     const url = new URL(prUrl.value)
     const provider = url.host.replace('.com', '')
@@ -34,8 +36,11 @@ const submit = async (e: Event) => {
     })
 
     if (!res.ok) {
-      throw new Error('Logout failed')
+      throw new Error('Review failed')
     }
+
+    const review = await res.json()
+    router.push(`/review/${review.id}`)
   } catch (err) {
     console.error(err)
   }

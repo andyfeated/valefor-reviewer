@@ -2,6 +2,8 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
+  NotFoundException,
   Param,
   Post,
   Req,
@@ -37,6 +39,20 @@ export class ReviewController {
     }
 
     const review = await this.reviewService.reviewPullRequest(prUrl, userId);
+    return review;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  async getReview(@Req() req: express.Request, @Param('id') reviewId: string) {
+    const userId = req.user.sub;
+
+    const review = await this.reviewService.getReview(reviewId, userId);
+
+    if (!review) {
+      throw new NotFoundException('Review not found');
+    }
+
     return review;
   }
 }

@@ -17,5 +17,6 @@ export interface GitHostStrategy {
     pulLRequest: any,
     prUrl: string,
     projectId: string,
+    userId: string,
   ): NormalizedPullRequest;
 }

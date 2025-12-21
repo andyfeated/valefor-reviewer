@@ -1,6 +1,26 @@
 <script setup>
-import { SparklesIcon } from 'lucide-vue-next'
+import { DownloadIcon, SparklesIcon, ArrowLeftIcon } from 'lucide-vue-next'
 import ProfileDropdown from './ProfileDropdown.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const props = defineProps({
+  displayPrInfo: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  review: {
+    type: Object,
+    required: false,
+    default: {},
+  },
+})
+
+const returnToHome = () => {
+  router.push('/')
+}
 </script>
 
 <template>
@@ -17,7 +37,48 @@ import ProfileDropdown from './ProfileDropdown.vue'
         <ProfileDropdown />
       </div>
 
-      tee
+      <div v-if="props.displayPrInfo">
+        <div class="flex justify-between mt-4 items-center">
+          <button
+            @click="returnToHome()"
+            class="mb-3 flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors group cursor-pointer"
+          >
+            <ArrowLeftIcon class="w-4 h-4" />
+            <span>Back to input</span>
+          </button>
+
+          <button
+            class="flex gap-2 flex items-center px-4 py-2 bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] font-medium rounded-lg hover:bg-[var(--color-primary)] hover:border-[var(--color-border-bright)] transition-colors"
+          >
+            <DownloadIcon class="w-4 h-4" />
+            Export
+          </button>
+        </div>
+
+        <div
+          v-if="!props.review"
+          class="w-90 h-4 bg-[var(--color-text-dim)] rounded-full animate-pulse opacity-65"
+        />
+        <p v-else class="text-sm text-[var(--color-text-secondary)] font-mono mb-1">
+          {{ props.review.pullRequestUrl }}
+        </p>
+
+        <div
+          v-if="!props.review"
+          class="mt-3 w-140 h-4 bg-[var(--color-text-dim)] rounded-full animate-pulse opacity-65"
+        />
+        <div v-else class="mt-3 flex items-center gap-4 text-sm text-[var(--color-text-dim)]">
+          <span>3 file changes</span>
+          <span>•</span>
+          <span>5 suggestions</span>
+          <span>•</span>
+          <span class="text-rose-400">1 critical</span>
+          <span>•</span>
+          <span class="text-amber-400">3 warning</span>
+          <span>•</span>
+          <span class="text-blue-400">1 suggestion</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>

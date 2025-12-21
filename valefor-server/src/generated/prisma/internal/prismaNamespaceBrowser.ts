@@ -107,6 +107,7 @@ export const ReviewScalarFieldEnum = {
   providerProjectId: 'providerProjectId',
   providerProjectIid: 'providerProjectIid',
   headSha: 'headSha',
+  userId: 'userId',
   title: 'title',
   description: 'description',
   state: 'state',
