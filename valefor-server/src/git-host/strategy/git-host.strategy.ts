@@ -1,3 +1,5 @@
+import { NormalizedPullRequest } from 'src/types/normalizedPullRequest.type';
+
 export type PullRequestDetailsFromUrl = {
   host: string;
   projectId: string;
@@ -5,11 +7,15 @@ export type PullRequestDetailsFromUrl = {
 };
 
 export interface GitHostStrategy {
-  isPublicRepo(prUrl: string): boolean;
   extractPullRequestDetailsFromUrl(prUrl: string): PullRequestDetailsFromUrl;
   getPullRequest(
     projectId: string,
     pullRequestId: string,
     accessToken: string,
   ): Promise<any>;
+  normalizePullRequest(
+    pulLRequest: any,
+    prUrl: string,
+    projectId: string,
+  ): NormalizedPullRequest;
 }

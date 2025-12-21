@@ -1,5 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PrismaService } from 'src/base/prisma.service';
 import { GitHostFactory } from 'src/git-host/factory/git-host.factory';
+import { NormalizedPullRequest } from 'src/types/normalizedPullRequest.type';
 import { UserService } from 'src/user/user.service';
 import { extractProviderFromPrUrl } from 'src/utils/extractProviderFromPrUrl';
 
@@ -8,6 +10,7 @@ export class ReviewService {
   constructor(
     private userService: UserService,
     private githostFactory: GitHostFactory,
+    private prismaService: PrismaService,
   ) {}
 
   async reviewPullRequest(prUrl: string, userId: string) {
@@ -30,8 +33,27 @@ export class ReviewService {
         pullRequestId,
         accessToken,
       );
+
+      const normalizedPullRequest = githost.normalizePullRequest(
+        pullRequest,
+        prUrl,
+        projectId,
+      );
+
+      console.log('pr', normalizedPullRequest);
+      const review = await this.createReview(normalizedPullRequest);
+      console.log('review', review);
+
+      return review;
     } catch (err) {
+      console.log('err', err);
       throw new UnauthorizedException(err);
     }
+  }
+
+  async createReview(pullRequest: NormalizedPullRequest) {
+    return this.prismaService.review.create({
+      data: pullRequest,
+    });
   }
 }

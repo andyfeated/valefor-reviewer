@@ -3,15 +3,10 @@ import {
   GitHostStrategy,
   PullRequestDetailsFromUrl,
 } from './git-host.strategy';
+import { NormalizedPullRequest } from 'src/types/normalizedPullRequest.type';
 
 export class GitlabStrategy implements GitHostStrategy {
   private readonly baseUrl = 'https://gitlab.com/api/v4';
-
-  isPublicRepo(prUrl: string): boolean {
-    return true;
-  }
-
-  exhangeCodeForToken(): void {}
 
   extractPullRequestDetailsFromUrl(prUrl: string): PullRequestDetailsFromUrl {
     const prUrlObj = new URL(prUrl);
@@ -42,5 +37,51 @@ export class GitlabStrategy implements GitHostStrategy {
     }
 
     return res.json();
+  }
+
+  normalizePullRequest(
+    pr: any,
+    prUrl: string,
+    projectId: string,
+  ): NormalizedPullRequest {
+    let normalizedState: 'open' | 'closed' | 'merged';
+    switch (pr.state) {
+      case 'opened':
+        normalizedState = 'open';
+        break;
+      case 'merged':
+        normalizedState = 'merged';
+        break;
+      case 'closed':
+        normalizedState = 'closed';
+        break;
+      default:
+        normalizedState = 'open';
+    }
+
+    return {
+      provider: 'gitlab',
+      providerPrId: String(pr.id),
+      providerPrIid: String(pr.iid),
+      providerProjectId: String(pr.project_id),
+      providerProjectIid: projectId,
+
+      title: pr.title,
+      description: pr.description ?? '',
+      state: normalizedState,
+      pullRequestUrl: prUrl,
+      sourceBranch: pr.source_branch,
+      targetBranch: pr.target_branch,
+
+      author: {
+        id: pr.author.id,
+        username: pr.author.username,
+        name: pr.author.name,
+      },
+
+      headSha: pr.diff_refs?.head_sha ?? '',
+      createdAt: pr.created_at,
+      updatedAt: pr.updated_at,
+    };
   }
 }

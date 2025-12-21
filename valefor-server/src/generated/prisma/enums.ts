@@ -9,7 +9,18 @@
 * 🟢 You can import this file directly.
 */
 
+export const PullRequestState = {
+  open: 'open',
+  closed: 'closed',
+  merged: 'merged'
+} as const
+
+export type PullRequestState = (typeof PullRequestState)[keyof typeof PullRequestState]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const Provider = {
+  gitlab: 'gitlab',
+  github: 'github'
+} as const
+
+export type Provider = (typeof Provider)[keyof typeof Provider]

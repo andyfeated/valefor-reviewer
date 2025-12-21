@@ -52,7 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  OAuthIdentity: 'OAuthIdentity'
+  OAuthIdentity: 'OAuthIdentity',
+  Review: 'Review'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -98,12 +99,50 @@ export const OAuthIdentityScalarFieldEnum = {
 export type OAuthIdentityScalarFieldEnum = (typeof OAuthIdentityScalarFieldEnum)[keyof typeof OAuthIdentityScalarFieldEnum]
 
 
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  providerPrId: 'providerPrId',
+  providerPrIid: 'providerPrIid',
+  providerProjectId: 'providerProjectId',
+  providerProjectIid: 'providerProjectIid',
+  headSha: 'headSha',
+  title: 'title',
+  description: 'description',
+  state: 'state',
+  pullRequestUrl: 'pullRequestUrl',
+  sourceBranch: 'sourceBranch',
+  targetBranch: 'targetBranch',
+  author: 'author',
+  aiReview: 'aiReview',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: 'JsonNull'
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -120,4 +159,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

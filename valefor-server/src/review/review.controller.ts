@@ -36,6 +36,7 @@ export class ReviewController {
       throw new BadRequestException('Invalid PR URL');
     }
 
-    await this.reviewService.reviewPullRequest(prUrl, userId);
+    const review = await this.reviewService.reviewPullRequest(prUrl, userId);
+    return review;
   }
 }

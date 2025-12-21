@@ -37,9 +37,6 @@ export class OAuthTokenGuard implements CanActivate {
 
       const expiresInMs = oauthIdentity.expiresIn * 1000;
 
-      console.log('Current time:', new Date().toLocaleString());
-      console.log('Expires at:', new Date(expiresInMs).toLocaleString());
-
       if (expiresInMs < new Date().getTime()) {
         this.oauthService.refreshOAuthToken(oauthIdentity, provider);
       }

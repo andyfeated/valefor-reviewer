@@ -10,7 +10,5 @@ export class PullRequestController {
     if (!prUrl) {
       throw new BadRequestException('Pull Request URL is required');
     }
-
-    return this.pullRequestService.getPullRequest(prUrl);
   }
 }

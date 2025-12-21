@@ -1,17 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { GitHostFactory } from "src/git-host/factory/git-host.factory";
+import { Injectable } from '@nestjs/common';
+import { GitHostFactory } from 'src/git-host/factory/git-host.factory';
 
 @Injectable()
 export class PullRequestService {
-  constructor(private readonly gitHostFactory: GitHostFactory) { }
-
-  getPullRequest(prUrl: string) {
-    const gitHost = this.gitHostFactory.create(prUrl)
-
-    const isPublic = gitHost.isPublicRepo(prUrl)
-
-    return {
-      test: 'works'
-    }
-  }
+  constructor(private readonly gitHostFactory: GitHostFactory) {}
 }
