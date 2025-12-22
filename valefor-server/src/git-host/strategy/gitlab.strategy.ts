@@ -39,12 +39,7 @@ export class GitlabStrategy implements GitHostStrategy {
     return res.json();
   }
 
-  normalizePullRequest(
-    pr: any,
-    prUrl: string,
-    projectId: string,
-    userId: string,
-  ): NormalizedPullRequest {
+  normalizePullRequest(pr: any): NormalizedPullRequest {
     let normalizedState: 'open' | 'closed' | 'merged';
     switch (pr.state) {
       case 'opened':
@@ -65,14 +60,10 @@ export class GitlabStrategy implements GitHostStrategy {
       providerPrId: String(pr.id),
       providerPrIid: String(pr.iid),
       providerProjectId: String(pr.project_id),
-      providerProjectIid: projectId,
-
-      userId,
 
       title: pr.title,
       description: pr.description ?? '',
       state: normalizedState,
-      pullRequestUrl: prUrl,
       sourceBranch: pr.source_branch,
       targetBranch: pr.target_branch,
 

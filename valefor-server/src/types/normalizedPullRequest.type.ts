@@ -3,14 +3,10 @@ export type NormalizedPullRequest = {
   providerPrId: string;
   providerPrIid: string;
   providerProjectId: string;
-  providerProjectIid: string;
-
-  userId: string;
 
   title: string;
   description: string;
   state: 'open' | 'closed' | 'merged';
-  pullRequestUrl: string;
   sourceBranch: string;
   targetBranch: string;
 

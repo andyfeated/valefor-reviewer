@@ -13,12 +13,7 @@ export class GithubStrategy implements GitHostStrategy {
     await Promise.resolve();
   }
 
-  normalizePullRequest(
-    pulLRequest: any,
-    prUrl: string,
-    projectId: string,
-    userId: string,
-  ): NormalizedPullRequest {
+  normalizePullRequest(pulLRequest: any): NormalizedPullRequest {
     return {} as NormalizedPullRequest;
   }
 }

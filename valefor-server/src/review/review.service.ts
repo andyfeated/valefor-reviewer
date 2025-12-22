@@ -1,6 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/base/prisma.service';
-import { Provider } from 'src/generated/prisma/enums';
 import { GitHostFactory } from 'src/git-host/factory/git-host.factory';
 import { NormalizedPullRequest } from 'src/types/normalizedPullRequest.type';
 import { UserService } from 'src/user/user.service';
@@ -25,13 +24,13 @@ export class ReviewService {
 
     const githost = this.githostFactory.create(provider);
 
-    const { projectId, pullRequestId } =
+    const { projectId: projectIid, pullRequestId } =
       githost.extractPullRequestDetailsFromUrl(prUrl);
 
     try {
       const existingReview = await this.getReviewByProjectIdAndAndPrId(
         userId,
-        projectId,
+        projectIid,
         pullRequestId,
       );
 
@@ -40,19 +39,19 @@ export class ReviewService {
       }
 
       const pullRequest = await githost.getPullRequest(
-        projectId,
+        projectIid,
         pullRequestId,
         accessToken,
       );
 
-      const normalizedPullRequest = githost.normalizePullRequest(
-        pullRequest,
-        prUrl,
-        projectId,
-        userId,
-      );
+      const normalizedPullRequest = githost.normalizePullRequest(pullRequest);
 
-      const review = await this.createReview(normalizedPullRequest);
+      const review = await this.createReview(
+        normalizedPullRequest,
+        userId,
+        prUrl,
+        projectIid,
+      );
 
       return review;
     } catch (err) {
@@ -60,9 +59,20 @@ export class ReviewService {
     }
   }
 
-  async createReview(pullRequest: NormalizedPullRequest) {
+  async createReview(
+    pullRequestMeta: NormalizedPullRequest,
+    userId: string,
+    prUrl: string,
+    projectIid: string,
+  ) {
+    // NOTE: pullRequest !== review
     return this.prismaService.review.create({
-      data: pullRequest,
+      data: {
+        ...pullRequestMeta,
+        userId,
+        pullRequestUrl: prUrl,
+        providerProjectIid: projectIid,
+      },
     });
   }
 

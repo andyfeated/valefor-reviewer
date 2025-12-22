@@ -13,10 +13,5 @@ export interface GitHostStrategy {
     pullRequestId: string,
     accessToken: string,
   ): Promise<any>;
-  normalizePullRequest(
-    pulLRequest: any,
-    prUrl: string,
-    projectId: string,
-    userId: string,
-  ): NormalizedPullRequest;
+  normalizePullRequest(pulLRequest: any): NormalizedPullRequest;
 }
