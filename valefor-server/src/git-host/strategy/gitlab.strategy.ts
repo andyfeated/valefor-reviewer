@@ -17,9 +17,9 @@ export class GitlabStrategy implements GitHostStrategy {
     const splittedPath = path.split('/-/');
 
     const projectId = splittedPath[0].slice(1);
-    const pullRequestId = splittedPath[1].replace('merge_requests/', '');
+    const pullRequestIid = splittedPath[1].replace('merge_requests/', '');
 
-    return { host, projectId, pullRequestId };
+    return { host, projectId, pullRequestIid };
   }
 
   async getPullRequest(
@@ -57,9 +57,9 @@ export class GitlabStrategy implements GitHostStrategy {
 
     return {
       provider: 'gitlab',
-      providerPrId: String(pr.id),
-      providerPrIid: String(pr.iid),
-      providerProjectId: String(pr.project_id),
+      pullRequestId: String(pr.id),
+      pullRequestIid: String(pr.iid),
+      providerProjectIid: String(pr.project_id),
 
       title: pr.title,
       description: pr.description ?? '',

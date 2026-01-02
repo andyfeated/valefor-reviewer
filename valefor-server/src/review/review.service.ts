@@ -24,14 +24,14 @@ export class ReviewService {
 
     const githost = this.githostFactory.create(provider);
 
-    const { projectId: projectIid, pullRequestId } =
+    const { projectId, pullRequestIid } =
       githost.extractPullRequestDetailsFromUrl(prUrl);
 
     try {
       const existingReview = await this.getReviewByProjectIdAndAndPrId(
         userId,
-        projectIid,
-        pullRequestId,
+        projectId,
+        pullRequestIid,
       );
 
       if (existingReview) {
@@ -39,8 +39,8 @@ export class ReviewService {
       }
 
       const pullRequest = await githost.getPullRequest(
-        projectIid,
-        pullRequestId,
+        projectId,
+        pullRequestIid,
         accessToken,
       );
 
@@ -50,7 +50,7 @@ export class ReviewService {
         normalizedPullRequest,
         userId,
         prUrl,
-        projectIid,
+        projectId,
       );
 
       return review;
@@ -63,7 +63,7 @@ export class ReviewService {
     pullRequestMeta: NormalizedPullRequest,
     userId: string,
     prUrl: string,
-    projectIid: string,
+    projectId: string,
   ) {
     // NOTE: pullRequest !== review
     return this.prismaService.review.create({
@@ -71,7 +71,7 @@ export class ReviewService {
         ...pullRequestMeta,
         userId,
         pullRequestUrl: prUrl,
-        providerProjectIid: projectIid,
+        providerProjectId: projectId,
       },
     });
   }
@@ -85,13 +85,13 @@ export class ReviewService {
   async getReviewByProjectIdAndAndPrId(
     userId: string,
     projectId: string,
-    pullRequestId: string,
+    pullRequestIid: string,
   ) {
     return this.prismaService.review.findFirst({
       where: {
         userId,
-        providerPrIid: pullRequestId,
-        providerProjectIid: projectId,
+        pullRequestIid,
+        providerProjectId: projectId,
       },
     });
   }

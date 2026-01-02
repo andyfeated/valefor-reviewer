@@ -6,7 +6,7 @@ import {
 
 export class GithubStrategy implements GitHostStrategy {
   extractPullRequestDetailsFromUrl(prUrl: string): PullRequestDetailsFromUrl {
-    return { projectId: '', host: '', pullRequestId: '' };
+    return { projectId: '', host: '', pullRequestIid: '' };
   }
 
   async getPullRequest(prUrl: string): Promise<any> {

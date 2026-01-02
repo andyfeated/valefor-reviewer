@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   OAuthIdentity: 'OAuthIdentity',
-  Review: 'Review'
+  Review: 'Review',
+  AiResult: 'AiResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -102,8 +103,8 @@ export type OAuthIdentityScalarFieldEnum = (typeof OAuthIdentityScalarFieldEnum)
 export const ReviewScalarFieldEnum = {
   id: 'id',
   provider: 'provider',
-  providerPrId: 'providerPrId',
-  providerPrIid: 'providerPrIid',
+  pullRequestId: 'pullRequestId',
+  pullRequestIid: 'pullRequestIid',
   providerProjectId: 'providerProjectId',
   providerProjectIid: 'providerProjectIid',
   headSha: 'headSha',
@@ -121,6 +122,14 @@ export const ReviewScalarFieldEnum = {
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const AiResultScalarFieldEnum = {
+  id: 'id',
+  reviewId: 'reviewId'
+} as const
+
+export type AiResultScalarFieldEnum = (typeof AiResultScalarFieldEnum)[keyof typeof AiResultScalarFieldEnum]
 
 
 export const SortOrder = {

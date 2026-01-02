@@ -386,7 +386,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   OAuthIdentity: 'OAuthIdentity',
-  Review: 'Review'
+  Review: 'Review',
+  AiResult: 'AiResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "oAuthIdentity" | "review"
+    modelProps: "user" | "oAuthIdentity" | "review" | "aiResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -628,6 +629,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AiResult: {
+      payload: Prisma.$AiResultPayload<ExtArgs>
+      fields: Prisma.AiResultFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiResultFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiResultFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+        }
+        findFirst: {
+          args: Prisma.AiResultFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiResultFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+        }
+        findMany: {
+          args: Prisma.AiResultFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>[]
+        }
+        create: {
+          args: Prisma.AiResultCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+        }
+        createMany: {
+          args: Prisma.AiResultCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiResultCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>[]
+        }
+        delete: {
+          args: Prisma.AiResultDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+        }
+        update: {
+          args: Prisma.AiResultUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiResultDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiResultUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiResultUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiResultUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+        }
+        aggregate: {
+          args: Prisma.AiResultAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiResult>
+        }
+        groupBy: {
+          args: Prisma.AiResultGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiResultGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiResultCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiResultCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -697,8 +772,8 @@ export type OAuthIdentityScalarFieldEnum = (typeof OAuthIdentityScalarFieldEnum)
 export const ReviewScalarFieldEnum = {
   id: 'id',
   provider: 'provider',
-  providerPrId: 'providerPrId',
-  providerPrIid: 'providerPrIid',
+  pullRequestId: 'pullRequestId',
+  pullRequestIid: 'pullRequestIid',
   providerProjectId: 'providerProjectId',
   providerProjectIid: 'providerProjectIid',
   headSha: 'headSha',
@@ -716,6 +791,14 @@ export const ReviewScalarFieldEnum = {
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const AiResultScalarFieldEnum = {
+  id: 'id',
+  reviewId: 'reviewId'
+} as const
+
+export type AiResultScalarFieldEnum = (typeof AiResultScalarFieldEnum)[keyof typeof AiResultScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -967,6 +1050,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   oAuthIdentity?: Prisma.OAuthIdentityOmit
   review?: Prisma.ReviewOmit
+  aiResult?: Prisma.AiResultOmit
 }
 
 /* Types for Logging */

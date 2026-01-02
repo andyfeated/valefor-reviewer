@@ -46,8 +46,8 @@ model Review {
   id String @id @default(cuid())
 
   provider           Provider
-  providerPrId       String
-  providerPrIid      String
+  pullRequestId      String
+  pullRequestIid     String
   providerProjectId  String
   providerProjectIid String
   headSha            String
@@ -66,10 +66,17 @@ model Review {
 
   aiReview Json?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  aiResult  AiResult?
 
-  @@unique([provider, providerPrId])
+  @@unique([provider, pullRequestId])
+}
+
+model AiResult {
+  id       String @id @default(cuid())
+  reviewId String @unique
+  review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 enum PullRequestState {

@@ -52,3 +52,8 @@ export type OAuthIdentity = Prisma.OAuthIdentityModel
  * 
  */
 export type Review = Prisma.ReviewModel
+/**
+ * Model AiResult
+ * 
+ */
+export type AiResult = Prisma.AiResultModel

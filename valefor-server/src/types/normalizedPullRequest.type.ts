@@ -1,8 +1,8 @@
 export type NormalizedPullRequest = {
   provider: 'gitlab' | 'github';
-  providerPrId: string;
-  providerPrIid: string;
-  providerProjectId: string;
+  pullRequestId: string;
+  pullRequestIid: string;
+  providerProjectIid: string;
 
   title: string;
   description: string;
