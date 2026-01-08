@@ -64,19 +64,39 @@ model Review {
 
   author Json
 
-  aiReview Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  aiResult  AiResult?
+  diffs Diff[]
 
   @@unique([provider, pullRequestId])
 }
 
-model AiResult {
+model Diff {
   id       String @id @default(cuid())
-  reviewId String @unique
+  reviewId String
   review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  path    String
+  oldPath String?
+  diff    String  @db.Text
+
+  // AI fields
+  criticalityLevel CriticalityLevel?
+  concerns         Json? // Array of strings
+
+  createdAt DateTime @default(now())
+
+  @@index([reviewId])
+  @@index([criticalityLevel])
+}
+
+enum CriticalityLevel {
+  passed
+  low
+  medium
+  high
+  critical
 }
 
 enum PullRequestState {

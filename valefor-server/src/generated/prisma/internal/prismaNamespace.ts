@@ -387,7 +387,7 @@ export const ModelName = {
   User: 'User',
   OAuthIdentity: 'OAuthIdentity',
   Review: 'Review',
-  AiResult: 'AiResult'
+  Diff: 'Diff'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "oAuthIdentity" | "review" | "aiResult"
+    modelProps: "user" | "oAuthIdentity" | "review" | "diff"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -629,77 +629,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    AiResult: {
-      payload: Prisma.$AiResultPayload<ExtArgs>
-      fields: Prisma.AiResultFieldRefs
+    Diff: {
+      payload: Prisma.$DiffPayload<ExtArgs>
+      fields: Prisma.DiffFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.AiResultFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload> | null
+          args: Prisma.DiffFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.AiResultFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+          args: Prisma.DiffFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>
         }
         findFirst: {
-          args: Prisma.AiResultFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload> | null
+          args: Prisma.DiffFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.AiResultFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+          args: Prisma.DiffFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>
         }
         findMany: {
-          args: Prisma.AiResultFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>[]
+          args: Prisma.DiffFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>[]
         }
         create: {
-          args: Prisma.AiResultCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+          args: Prisma.DiffCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>
         }
         createMany: {
-          args: Prisma.AiResultCreateManyArgs<ExtArgs>
+          args: Prisma.DiffCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.AiResultCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>[]
+          args: Prisma.DiffCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>[]
         }
         delete: {
-          args: Prisma.AiResultDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+          args: Prisma.DiffDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>
         }
         update: {
-          args: Prisma.AiResultUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+          args: Prisma.DiffUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>
         }
         deleteMany: {
-          args: Prisma.AiResultDeleteManyArgs<ExtArgs>
+          args: Prisma.DiffDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.AiResultUpdateManyArgs<ExtArgs>
+          args: Prisma.DiffUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.AiResultUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>[]
+          args: Prisma.DiffUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>[]
         }
         upsert: {
-          args: Prisma.AiResultUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiResultPayload>
+          args: Prisma.DiffUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiffPayload>
         }
         aggregate: {
-          args: Prisma.AiResultAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAiResult>
+          args: Prisma.DiffAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDiff>
         }
         groupBy: {
-          args: Prisma.AiResultGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AiResultGroupByOutputType>[]
+          args: Prisma.DiffGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DiffGroupByOutputType>[]
         }
         count: {
-          args: Prisma.AiResultCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AiResultCountAggregateOutputType> | number
+          args: Prisma.DiffCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DiffCountAggregateOutputType> | number
         }
       }
     }
@@ -785,7 +785,6 @@ export const ReviewScalarFieldEnum = {
   sourceBranch: 'sourceBranch',
   targetBranch: 'targetBranch',
   author: 'author',
-  aiReview: 'aiReview',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -793,12 +792,18 @@ export const ReviewScalarFieldEnum = {
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
 
 
-export const AiResultScalarFieldEnum = {
+export const DiffScalarFieldEnum = {
   id: 'id',
-  reviewId: 'reviewId'
+  reviewId: 'reviewId',
+  path: 'path',
+  oldPath: 'oldPath',
+  diff: 'diff',
+  criticalityLevel: 'criticalityLevel',
+  concerns: 'concerns',
+  createdAt: 'createdAt'
 } as const
 
-export type AiResultScalarFieldEnum = (typeof AiResultScalarFieldEnum)[keyof typeof AiResultScalarFieldEnum]
+export type DiffScalarFieldEnum = (typeof DiffScalarFieldEnum)[keyof typeof DiffScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -940,6 +945,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'CriticalityLevel'
+ */
+export type EnumCriticalityLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CriticalityLevel'>
+    
+
+
+/**
+ * Reference to a field of type 'CriticalityLevel[]'
+ */
+export type ListEnumCriticalityLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CriticalityLevel[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1050,7 +1069,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   oAuthIdentity?: Prisma.OAuthIdentityOmit
   review?: Prisma.ReviewOmit
-  aiResult?: Prisma.AiResultOmit
+  diff?: Prisma.DiffOmit
 }
 
 /* Types for Logging */

@@ -9,6 +9,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const CriticalityLevel = {
+  passed: 'passed',
+  low: 'low',
+  medium: 'medium',
+  high: 'high',
+  critical: 'critical'
+} as const
+
+export type CriticalityLevel = (typeof CriticalityLevel)[keyof typeof CriticalityLevel]
+
+
 export const PullRequestState = {
   open: 'open',
   closed: 'closed',

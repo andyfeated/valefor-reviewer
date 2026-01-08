@@ -1,10 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/base/prisma.service';
 import { GitHostFactory } from 'src/git-host/factory/git-host.factory';
 import { NormalizedPullRequest } from 'src/types/normalizedPullRequest.type';
 import { UserService } from 'src/user/user.service';
 import { extractProviderFromPrUrl } from 'src/utils/extractProviderFromPrUrl';
 import { DiffValidator } from './diff/diff-validator';
+import { MappedDiff } from 'src/git-host/strategy/git-host.strategy';
 
 @Injectable()
 export class ReviewService {
@@ -46,6 +47,7 @@ export class ReviewService {
         accessToken,
       );
 
+      // Validators
       const mappedDiffs = diffs.map((diff) => githost.mapDiff(diff));
 
       const validDiffs = mappedDiffs.filter((mappedDiff) => {
@@ -54,11 +56,20 @@ export class ReviewService {
         return validationResult.passed;
       });
 
+      if (!validDiffs.length) {
+        throw new Error('No valid diffs found');
+      }
+
+      if (diffs.length > 10) {
+        throw new Error('Can only review 10 files per PR');
+      }
+
       const pullRequestMeta = await githost.getPullRequest(
         projectId,
         pullRequestIid,
         accessToken,
       );
+
       const normalizedPullRequest =
         githost.normalizePullRequest(pullRequestMeta);
 
@@ -69,19 +80,20 @@ export class ReviewService {
         projectId,
       );
 
+      await this.createDiffs(review.id, validDiffs);
+
       return review;
     } catch (err) {
-      throw new UnauthorizedException(err);
+      throw new BadRequestException(err.message || 'Failed to create review');
     }
   }
 
-  async createReview(
+  private async createReview(
     pullRequestMeta: NormalizedPullRequest,
     userId: string,
     prUrl: string,
     projectId: string,
   ) {
-    // NOTE: pullRequest !== review
     return this.prismaService.review.create({
       data: {
         ...pullRequestMeta,
@@ -90,6 +102,23 @@ export class ReviewService {
         providerProjectId: projectId,
       },
     });
+  }
+
+  private async createDiffs(reviewId: string, mappedDiffs: MappedDiff[]) {
+    return this.prismaService.$transaction(
+      mappedDiffs.map((diff) => {
+        const data = {
+          reviewId,
+          path: diff.path,
+          oldPath: null,
+          diff: diff.diff,
+          criticalityLevel: null,
+          concerns: null,
+        };
+
+        return this.prismaService.diff.create({ data });
+      }),
+    );
   }
 
   async getReview(id: string, userId: string) {

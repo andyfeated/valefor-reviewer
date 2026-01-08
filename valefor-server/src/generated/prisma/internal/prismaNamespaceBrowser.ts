@@ -54,7 +54,7 @@ export const ModelName = {
   User: 'User',
   OAuthIdentity: 'OAuthIdentity',
   Review: 'Review',
-  AiResult: 'AiResult'
+  Diff: 'Diff'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -116,7 +116,6 @@ export const ReviewScalarFieldEnum = {
   sourceBranch: 'sourceBranch',
   targetBranch: 'targetBranch',
   author: 'author',
-  aiReview: 'aiReview',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -124,12 +123,18 @@ export const ReviewScalarFieldEnum = {
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
 
 
-export const AiResultScalarFieldEnum = {
+export const DiffScalarFieldEnum = {
   id: 'id',
-  reviewId: 'reviewId'
+  reviewId: 'reviewId',
+  path: 'path',
+  oldPath: 'oldPath',
+  diff: 'diff',
+  criticalityLevel: 'criticalityLevel',
+  concerns: 'concerns',
+  createdAt: 'createdAt'
 } as const
 
-export type AiResultScalarFieldEnum = (typeof AiResultScalarFieldEnum)[keyof typeof AiResultScalarFieldEnum]
+export type DiffScalarFieldEnum = (typeof DiffScalarFieldEnum)[keyof typeof DiffScalarFieldEnum]
 
 
 export const SortOrder = {
