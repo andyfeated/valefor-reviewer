@@ -129,6 +129,8 @@ export const DiffScalarFieldEnum = {
   path: 'path',
   oldPath: 'oldPath',
   diff: 'diff',
+  isValid: 'isValid',
+  validationReason: 'validationReason',
   criticalityLevel: 'criticalityLevel',
   concerns: 'concerns',
   createdAt: 'createdAt'

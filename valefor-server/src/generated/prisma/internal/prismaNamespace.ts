@@ -798,6 +798,8 @@ export const DiffScalarFieldEnum = {
   path: 'path',
   oldPath: 'oldPath',
   diff: 'diff',
+  isValid: 'isValid',
+  validationReason: 'validationReason',
   criticalityLevel: 'criticalityLevel',
   concerns: 'concerns',
   createdAt: 'createdAt'
@@ -941,6 +943,13 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

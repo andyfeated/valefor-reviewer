@@ -36,6 +36,34 @@ export const isLogicFileRule: DiffRule = (mappedDiff) => {
   return { passed, reason: passed ? undefined : 'Unsupported File extension' };
 };
 
+export const isNotTestFileRule: DiffRule = (mappedDiff) => {
+  const testPatterns = [
+    '/test/',
+    '/tests/',
+    '/__tests__/',
+    '/spec/',
+    '/__mocks__/',
+    '.test.',
+    '.spec.',
+    '.test.ts',
+    '.test.js',
+    '.test.tsx',
+    '.test.jsx',
+    '.spec.ts',
+    '.spec.js',
+    '.spec.tsx',
+    '.spec.jsx',
+  ];
+
+  const passed = !testPatterns.some((pattern) =>
+    mappedDiff.path.toLowerCase().includes(pattern.toLowerCase()),
+  );
+
+  return {
+    passed,
+    reason: passed ? undefined : 'Test file - skipped from review',
+  };
+};
 export const isNotNoisePathRule: DiffRule = (mappedDiff) => {
   const noiseDirs = ['node_modules/', 'dist/', 'build/', 'vendor/', 'public/'];
   const passed = !noiseDirs.some((dir) => mappedDiff.path.includes(dir));

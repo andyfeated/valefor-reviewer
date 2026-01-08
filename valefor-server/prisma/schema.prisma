@@ -79,7 +79,11 @@ model Diff {
 
   path    String
   oldPath String?
-  diff    String  @db.Text
+  diff    String? @db.Text
+
+  // Validation fields
+  isValid          Boolean
+  validationReason String?
 
   // AI fields
   criticalityLevel CriticalityLevel?

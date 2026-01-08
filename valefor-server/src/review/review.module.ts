@@ -10,6 +10,7 @@ import {
   hasAdditionRule,
   isLogicFileRule,
   isNotNoisePathRule,
+  isNotTestFileRule,
   isNotTooLargeRule,
   isNotTooLongRule,
 } from './diff/diff-rules';
@@ -24,7 +25,8 @@ import {
         hasAdditionRule,
         isLogicFileRule,
         isNotNoisePathRule,
-        isNotTooLongRule(1000),
+        isNotTestFileRule,
+        isNotTooLongRule(500),
       ],
     },
     ReviewService,

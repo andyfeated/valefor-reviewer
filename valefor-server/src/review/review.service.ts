@@ -50,11 +50,17 @@ export class ReviewService {
       // Validators
       const mappedDiffs = diffs.map((diff) => githost.mapDiff(diff));
 
-      const validDiffs = mappedDiffs.filter((mappedDiff) => {
+      const diffsWithValidation = mappedDiffs.map((mappedDiff) => {
         const validationResult = this.diffValidator.validate(mappedDiff);
 
-        return validationResult.passed;
+        return {
+          mappedDiff,
+          isValid: validationResult.passed,
+          validationReason: validationResult.reason,
+        };
       });
+
+      const validDiffs = diffsWithValidation.filter((diff) => diff.isValid);
 
       if (!validDiffs.length) {
         throw new Error('No valid diffs found');
@@ -80,8 +86,9 @@ export class ReviewService {
         projectId,
       );
 
-      await this.createDiffs(review.id, validDiffs);
+      await this.createDiffs(review.id, diffsWithValidation);
 
+      console.log('review here', review);
       return review;
     } catch (err) {
       throw new BadRequestException(err.message || 'Failed to create review');
@@ -104,14 +111,23 @@ export class ReviewService {
     });
   }
 
-  private async createDiffs(reviewId: string, mappedDiffs: MappedDiff[]) {
+  private async createDiffs(
+    reviewId: string,
+    diffsWithValidation: Array<{
+      mappedDiff: MappedDiff;
+      isValid: boolean;
+      validationReason?: string;
+    }>,
+  ) {
     return this.prismaService.$transaction(
-      mappedDiffs.map((diff) => {
+      diffsWithValidation.map((diff) => {
         const data = {
           reviewId,
-          path: diff.path,
+          path: diff.mappedDiff.path,
           oldPath: null,
-          diff: diff.diff,
+          isValid: diff.isValid,
+          validationReason: diff.validationReason ?? null,
+          diff: diff.isValid ? diff.mappedDiff.diff : null,
           criticalityLevel: null,
           concerns: null,
         };
