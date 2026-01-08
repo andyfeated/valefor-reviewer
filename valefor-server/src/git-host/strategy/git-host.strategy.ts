@@ -6,6 +6,15 @@ export type PullRequestDetailsFromUrl = {
   pullRequestIid: string;
 };
 
+export type MappedDiff = {
+  diff: string;
+  path: string;
+  addedLines: number;
+  removedLines: number;
+  totalLines: number;
+  isTooLarge: boolean;
+};
+
 export interface GitHostStrategy {
   extractPullRequestDetailsFromUrl(prUrl: string): PullRequestDetailsFromUrl;
   getPullRequest(
@@ -13,5 +22,11 @@ export interface GitHostStrategy {
     pullRequestIid: string,
     accessToken: string,
   ): Promise<any>;
+  getDiffs(
+    projectId: string,
+    pullRequestIid: string,
+    accessToken: string,
+  ): Promise<any>;
+  mapDiff(diff: any): MappedDiff;
   normalizePullRequest(pulLRequest: any): NormalizedPullRequest;
 }

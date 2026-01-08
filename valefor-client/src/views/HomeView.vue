@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const prUrl = ref<string>(
-  'https://gitlab.com/theoria-medical/se/tm-charteasy-server/-/merge_requests/3562',
+  'https://gitlab.com/theoria-medical/se/tm-institute-server/-/merge_requests/173',
 )
 const isAnalyzing = ref<boolean>(false)
 

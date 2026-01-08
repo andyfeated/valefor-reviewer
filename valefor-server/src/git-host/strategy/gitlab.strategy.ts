@@ -1,6 +1,7 @@
 import { HttpException } from '@nestjs/common';
 import {
   GitHostStrategy,
+  MappedDiff,
   PullRequestDetailsFromUrl,
 } from './git-host.strategy';
 import { NormalizedPullRequest } from 'src/types/normalizedPullRequest.type';
@@ -24,11 +25,11 @@ export class GitlabStrategy implements GitHostStrategy {
 
   async getPullRequest(
     projectId: string,
-    pullRequestId: string,
+    pullRequestIid: string,
     accessToken: string,
   ) {
     const res = await fetch(
-      `${this.baseUrl}/projects/${encodeURIComponent(projectId)}/merge_requests/${pullRequestId}`,
+      `${this.baseUrl}/projects/${encodeURIComponent(projectId)}/merge_requests/${pullRequestIid}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
 
@@ -37,6 +38,53 @@ export class GitlabStrategy implements GitHostStrategy {
     }
 
     return res.json();
+  }
+
+  async getDiffs(
+    projectId: string,
+    pullRequestIid: string,
+    accessToken: string,
+  ) {
+    const res = await fetch(
+      `${this.baseUrl}/projects/${encodeURIComponent(projectId)}/merge_requests/${pullRequestIid}/diffs?unidiff=true`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+
+    if (!res.ok) {
+      throw new HttpException(await res.text(), res.status);
+    }
+
+    return res.json();
+  }
+
+  public mapDiff(raw: any): MappedDiff {
+    const diff: string = raw.diff || '';
+    const path: string = raw.new_path || raw.old_path;
+
+    const lines = diff.split('\n');
+
+    let added = 0;
+    let removed = 0;
+    let neutral = 0;
+
+    for (const line of lines) {
+      if (line.startsWith('+') && !line.startsWith('+++')) {
+        added++;
+      } else if (line.startsWith('-') && !line.startsWith('---')) {
+        removed++;
+      } else {
+        neutral++;
+      }
+    }
+
+    return {
+      diff,
+      path,
+      addedLines: added,
+      removedLines: removed,
+      totalLines: added + removed + neutral - 3,
+      isTooLarge: !!raw.too_large || !!raw.collapsed,
+    };
   }
 
   normalizePullRequest(pr: any): NormalizedPullRequest {

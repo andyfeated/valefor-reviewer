@@ -4,6 +4,7 @@ import { GitHostFactory } from 'src/git-host/factory/git-host.factory';
 import { NormalizedPullRequest } from 'src/types/normalizedPullRequest.type';
 import { UserService } from 'src/user/user.service';
 import { extractProviderFromPrUrl } from 'src/utils/extractProviderFromPrUrl';
+import { DiffValidator } from './diff/diff-validator';
 
 @Injectable()
 export class ReviewService {
@@ -11,6 +12,7 @@ export class ReviewService {
     private userService: UserService,
     private githostFactory: GitHostFactory,
     private prismaService: PrismaService,
+    private diffValidator: DiffValidator,
   ) {}
 
   async reviewPullRequest(prUrl: string, userId: string) {
@@ -38,13 +40,27 @@ export class ReviewService {
         return existingReview;
       }
 
-      const pullRequest = await githost.getPullRequest(
+      const diffs: any[] = await githost.getDiffs(
         projectId,
         pullRequestIid,
         accessToken,
       );
 
-      const normalizedPullRequest = githost.normalizePullRequest(pullRequest);
+      const mappedDiffs = diffs.map((diff) => githost.mapDiff(diff));
+
+      const validDiffs = mappedDiffs.filter((mappedDiff) => {
+        const validationResult = this.diffValidator.validate(mappedDiff);
+
+        return validationResult.passed;
+      });
+
+      const pullRequestMeta = await githost.getPullRequest(
+        projectId,
+        pullRequestIid,
+        accessToken,
+      );
+      const normalizedPullRequest =
+        githost.normalizePullRequest(pullRequestMeta);
 
       const review = await this.createReview(
         normalizedPullRequest,
