@@ -46,19 +46,28 @@ onMounted(async () => {
 <template>
   <Navbar :review="reviewData" :displayPrInfo="true" />
 
-  <motion.div
-    :initial="{ x: 20, opacity: 0 }"
-    :animate="{ x: 0, opacity: 1 }"
-    :transition="{ duration: 0.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }"
-  >
-    <CodeDiff
-      v-for="diff in diffsData"
-      :key="diff.id"
-      :diff="diff"
-      :is-expanded="isExpanded(diff.id)"
-      @toggle-collapse="toggleCollapsed(diff.id)"
-    />
-  </motion.div>
+  <div class="max-w-7xl mx-auto p-8">
+    <div class="grid grid-cols-4 gap-6">
+      <motion.div class="col-span-1">
+        <span class="text-white">file tree here</span>
+      </motion.div>
+
+      <motion.div
+        :initial="{ x: 20, opacity: 0 }"
+        :animate="{ x: 0, opacity: 1 }"
+        :transition="{ duration: 0.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }"
+        class="col-span-3 space-y-6"
+      >
+        <CodeDiff
+          v-for="diff in diffsData"
+          :key="diff.id"
+          :diff="diff"
+          :is-expanded="isExpanded(diff.id)"
+          @toggle-collapse="toggleCollapsed(diff.id)"
+        />
+      </motion.div>
+    </div>
+  </div>
 </template>
 
 <style></style>
