@@ -61,7 +61,7 @@ export const isNotTestFileRule: DiffRule = (mappedDiff) => {
 
   return {
     passed,
-    reason: passed ? undefined : 'Test file - skipped from review',
+    reason: passed ? undefined : 'File is a test file',
   };
 };
 export const isNotNoisePathRule: DiffRule = (mappedDiff) => {
@@ -76,5 +76,5 @@ export const isNotTooLongRule =
   (mappedDiff) => {
     const passed = mappedDiff.totalLines <= max;
 
-    return { passed, reason: passed ? undefined : 'Path is from a noise path' };
+    return { passed, reason: passed ? undefined : 'File is too long' };
   };

@@ -88,7 +88,6 @@ export class ReviewService {
 
       await this.createDiffs(review.id, diffsWithValidation);
 
-      console.log('review here', review);
       return review;
     } catch (err) {
       throw new BadRequestException(err.message || 'Failed to create review');
@@ -138,9 +137,12 @@ export class ReviewService {
   }
 
   async getReview(id: string, userId: string) {
-    return this.prismaService.review.findFirst({
+    const review = this.prismaService.review.findFirst({
       where: { id, userId },
+      include: { diffs: true },
     });
+
+    return review;
   }
 
   async getReviewByProjectIdAndAndPrId(

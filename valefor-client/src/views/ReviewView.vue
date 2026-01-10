@@ -1,11 +1,28 @@
 <script setup>
+import { motion } from 'motion-v'
 import Navbar from '@/components/Navbar.vue'
-import { onMounted, ref } from 'vue'
+import CodeDiff from '@/components/CodeDiff.vue'
+import { onMounted, ref, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const { id } = route.params
+
 const reviewData = ref(null)
+const diffsData = ref([])
+
+const collapsedSet = ref(new Set())
+
+const toggleCollapsed = (diffId) => {
+  if (collapsedSet.value.has(diffId)) {
+    collapsedSet.value.delete(diffId)
+    return
+  }
+
+  collapsedSet.value.add(diffId)
+}
+
+const isExpanded = (diffId) => !collapsedSet.value.has(diffId)
 
 onMounted(async () => {
   try {
@@ -19,6 +36,7 @@ onMounted(async () => {
 
     const review = await res.json()
     reviewData.value = review
+    diffsData.value = review.diffs ?? []
   } catch (err) {
     console.error(err)
   }
@@ -27,6 +45,20 @@ onMounted(async () => {
 
 <template>
   <Navbar :review="reviewData" :displayPrInfo="true" />
+
+  <motion.div
+    :initial="{ x: 20, opacity: 0 }"
+    :animate="{ x: 0, opacity: 1 }"
+    :transition="{ duration: 0.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }"
+  >
+    <CodeDiff
+      v-for="diff in diffsData"
+      :key="diff.id"
+      :diff="diff"
+      :is-expanded="isExpanded(diff.id)"
+      @toggle-collapse="toggleCollapsed(diff.id)"
+    />
+  </motion.div>
 </template>
 
 <style></style>
