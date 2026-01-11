@@ -1,5 +1,5 @@
 <script setup>
-import { DownloadIcon, SparklesIcon, ArrowLeftIcon } from 'lucide-vue-next'
+import { RefreshCwIcon, SparklesIcon, ArrowLeftIcon } from 'lucide-vue-next'
 import ProfileDropdown from './ProfileDropdown.vue'
 import { useRouter } from 'vue-router'
 
@@ -50,8 +50,8 @@ const returnToHome = () => {
           <button
             class="flex gap-2 flex items-center px-4 py-2 bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] text-[var(--color-text-secondary)] font-medium rounded-lg hover:bg-[var(--color-primary)] hover:border-[var(--color-border-bright)] transition-colors"
           >
-            <DownloadIcon class="w-4 h-4" />
-            Export
+            <RefreshCwIcon class="w-4 h-4" />
+            Pull latest changes
           </button>
         </div>
 

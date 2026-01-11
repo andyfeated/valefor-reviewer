@@ -1,6 +1,7 @@
 <script setup>
 import { motion } from 'motion-v'
 import Navbar from '@/components/Navbar.vue'
+import FileTree from '@/components/FileTree.vue'
 import CodeDiff from '@/components/CodeDiff.vue'
 import { onMounted, ref, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
@@ -46,10 +47,17 @@ onMounted(async () => {
 <template>
   <Navbar :review="reviewData" :displayPrInfo="true" />
 
-  <div class="max-w-7xl mx-auto p-8">
+  <div class="max-w-[1350px] mx-auto p-8">
     <div class="grid grid-cols-4 gap-6">
-      <motion.div class="col-span-1">
-        <span class="text-white">file tree here</span>
+      <motion.div
+        :initial="{ x: -20, opacity: 0 }"
+        :animate="{ x: 0, opacity: 1 }"
+        :transition="{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }"
+        class="col-span-1"
+      >
+        <div class="sticky top-8">
+          <FileTree :diffs="diffsData" />
+        </div>
       </motion.div>
 
       <motion.div
