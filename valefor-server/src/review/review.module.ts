@@ -19,9 +19,10 @@ import {
   isWithinTokenLimitRule,
 } from './pr/pr-rules';
 import { PrValidator } from './pr/pr-validator';
+import { AIModule } from 'src/ai/ai.module';
 
 export const MAX_FILES = 10;
-export const MAX_PR_TOKENS = 7000;
+export const MAX_PR_TOKENS = 10_000;
 
 @Module({
   controllers: [ReviewController],
@@ -50,6 +51,6 @@ export const MAX_PR_TOKENS = 7000;
     PrValidator,
   ],
   exports: [],
-  imports: [UserModule, AuthModule, GitHostModule, BaseModule],
+  imports: [UserModule, AuthModule, GitHostModule, BaseModule, AIModule],
 })
 export class ReviewModule {}

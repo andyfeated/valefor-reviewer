@@ -7,6 +7,7 @@ import { extractProviderFromPrUrl } from 'src/utils/extractProviderFromPrUrl';
 import { DiffValidator } from './diff/diff-validator';
 import { MappedDiff } from 'src/git-host/strategy/git-host.strategy';
 import { PrValidator } from './pr/pr-validator';
+import { AIService } from 'src/ai/ai.service';
 
 @Injectable()
 export class ReviewService {
@@ -16,6 +17,7 @@ export class ReviewService {
     private prismaService: PrismaService,
     private diffValidator: DiffValidator,
     private prValidator: PrValidator,
+    private aiService: AIService,
   ) {}
 
   async reviewPullRequest(prUrl: string, userId: string) {
@@ -50,7 +52,9 @@ export class ReviewService {
       );
 
       // Diff Level Validators
-      const mappedDiffs = diffs.map((diff) => githost.mapDiff(diff));
+      const mappedDiffs: MappedDiff[] = diffs.map((diff) =>
+        githost.mapDiff(diff),
+      );
 
       const diffsWithValidation = mappedDiffs.map((mappedDiff) => {
         const validationResult = this.diffValidator.validate(mappedDiff);
@@ -73,6 +77,9 @@ export class ReviewService {
         throw new Error(prValidation.reason);
       }
 
+      // Send diffs to LLM asynchronously
+      this.dispatchSendDiffsToLlm(validDiffs);
+
       const pullRequestMeta = await githost.getPullRequest(
         projectId,
         pullRequestIid,
@@ -94,6 +101,23 @@ export class ReviewService {
       return review;
     } catch (err) {
       throw new BadRequestException(err.message || 'Failed to create review');
+    }
+  }
+
+  private async dispatchSendDiffsToLlm(validDiffs: MappedDiff[]) {
+    console.log('dispatched');
+    try {
+      const sanitizedDiffs = validDiffs.map((diff) => ({
+        path: diff.path,
+        diff: diff.diff,
+      }));
+
+      const concerns = await this.aiService.reviewDiffs(sanitizedDiffs);
+      //NOTE: update review status to done
+      console.log(concerns);
+    } catch (error) {
+      //NOTE: update review status to error
+      console.error(error);
     }
   }
 
