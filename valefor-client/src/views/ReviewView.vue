@@ -25,6 +25,12 @@ const toggleCollapsed = (diffId) => {
 
 const isExpanded = (diffId) => !collapsedSet.value.has(diffId)
 
+const selectedFile = ref(null)
+
+const selectFile = (path) => {
+  selectedFile.value = path
+}
+
 onMounted(async () => {
   try {
     const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/review/${id}`, {
@@ -48,7 +54,7 @@ onMounted(async () => {
   <Navbar :review="reviewData" :displayPrInfo="true" />
 
   <div class="max-w-[1350px] mx-auto p-8">
-    <div class="grid grid-cols-4 gap-6">
+    <div class="grid grid-cols-4 gap-7">
       <motion.div
         :initial="{ x: -20, opacity: 0 }"
         :animate="{ x: 0, opacity: 1 }"
@@ -56,7 +62,7 @@ onMounted(async () => {
         class="col-span-1"
       >
         <div class="sticky top-8">
-          <FileTree :diffs="diffsData" />
+          <FileTree :diffs="diffsData" :selectedFile="selectedFile" @selectFile="selectFile" />
         </div>
       </motion.div>
 

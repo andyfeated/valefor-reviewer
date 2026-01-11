@@ -7,6 +7,7 @@ const props = defineProps({
     type: Array,
     default: [],
   },
+  selectedFile: { type: String },
 })
 
 const buildFileTree = (diffs) => {
@@ -68,6 +69,7 @@ const flattenTree = (nodeMap) => {
   return result
 }
 
+// recursive
 const normalizeTree = (nodeMap) => {
   return Object.values(nodeMap).map((node) => ({
     ...node,
@@ -86,6 +88,21 @@ const tree = computed(() => {
 })
 
 const collapsedFolders = ref(new Set())
+
+const toggleFolder = (path) => {
+  const next = new Set(collapsedFolders.value)
+
+  if (next.has(path)) {
+    next.delete(path)
+  } else {
+    next.add(path)
+  }
+
+  console.log(next)
+  collapsedFolders.value = next
+}
+
+const emit = defineEmits(['selectFile'])
 </script>
 
 <template>
@@ -106,6 +123,9 @@ const collapsedFolders = ref(new Set())
         :node="node"
         :depth="0"
         :collapsedFolders="collapsedFolders"
+        :selectedFile="props.selectedFile"
+        @toggleFolder="toggleFolder"
+        @selectFile="$emit('selectFile', $event)"
       />
     </div>
   </div>
