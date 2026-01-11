@@ -6,6 +6,7 @@ import { UserService } from 'src/user/user.service';
 import { extractProviderFromPrUrl } from 'src/utils/extractProviderFromPrUrl';
 import { DiffValidator } from './diff/diff-validator';
 import { MappedDiff } from 'src/git-host/strategy/git-host.strategy';
+import { PrValidator } from './pr/pr-validator';
 
 @Injectable()
 export class ReviewService {
@@ -14,6 +15,7 @@ export class ReviewService {
     private githostFactory: GitHostFactory,
     private prismaService: PrismaService,
     private diffValidator: DiffValidator,
+    private prValidator: PrValidator,
   ) {}
 
   async reviewPullRequest(prUrl: string, userId: string) {
@@ -47,7 +49,7 @@ export class ReviewService {
         accessToken,
       );
 
-      // Validators
+      // Diff Level Validators
       const mappedDiffs = diffs.map((diff) => githost.mapDiff(diff));
 
       const diffsWithValidation = mappedDiffs.map((mappedDiff) => {
@@ -60,14 +62,15 @@ export class ReviewService {
         };
       });
 
-      const validDiffs = diffsWithValidation.filter((diff) => diff.isValid);
+      const validDiffs = diffsWithValidation
+        .filter((diff) => diff.isValid)
+        .map((diff) => diff.mappedDiff);
 
-      if (!validDiffs.length) {
-        throw new Error('No valid diffs found');
-      }
+      // PR Level Validators
+      const prValidation = this.prValidator.validate(validDiffs);
 
-      if (diffs.length > 10) {
-        throw new Error('Can only review 10 files per PR');
+      if (!prValidation.passed) {
+        throw new Error(prValidation.reason);
       }
 
       const pullRequestMeta = await githost.getPullRequest(

@@ -12,8 +12,16 @@ import {
   isNotNoisePathRule,
   isNotTestFileRule,
   isNotTooLargeRule,
-  isNotTooLongRule,
 } from './diff/diff-rules';
+import {
+  hasValidDiffsRule,
+  isWithinMaxFileRule,
+  isWithinTokenLimitRule,
+} from './pr/pr-rules';
+import { PrValidator } from './pr/pr-validator';
+
+export const MAX_FILES = 10;
+export const MAX_PR_TOKENS = 7000;
 
 @Module({
   controllers: [ReviewController],
@@ -26,11 +34,20 @@ import {
         isLogicFileRule,
         isNotNoisePathRule,
         isNotTestFileRule,
-        isNotTooLongRule(500),
+        // isNotTooLongRule(500),
+      ],
+    },
+    {
+      provide: 'PR_RULES',
+      useValue: [
+        hasValidDiffsRule,
+        isWithinMaxFileRule(MAX_FILES),
+        isWithinTokenLimitRule(MAX_PR_TOKENS),
       ],
     },
     ReviewService,
     DiffValidator,
+    PrValidator,
   ],
   exports: [],
   imports: [UserModule, AuthModule, GitHostModule, BaseModule],

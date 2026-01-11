@@ -36,7 +36,8 @@ const submit = async (e: Event) => {
     })
 
     if (!res.ok) {
-      throw new Error('Review failed')
+      const errorData = await res.json()
+      throw new Error(errorData?.message || errorData?.error || 'An error occured')
     }
 
     const review = await res.json()
