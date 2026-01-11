@@ -18,6 +18,20 @@ const emit = defineEmits(['toggleFolder', 'selectFile'])
 const paddingLeft = computed(() => `${props.depth * 16 + 12}px`)
 const isCollapsed = computed(() => props.collapsedFolders.has(props.node.path))
 const isSelected = computed(() => props.selectedFile === props.node.path)
+
+const displayName = computed(() => {
+  const name = props.node.name
+  const baseLength = 20
+  const depthPenalty = props.depth * 2
+  const maxLength = Math.max(baseLength - depthPenalty, 22)
+
+  if (name.length <= maxLength) return name
+
+  const keepLength = Math.floor((maxLength - 3) / 2)
+  const start = name.slice(0, keepLength)
+  const end = name.slice(name.length - keepLength)
+  return `${start}...${end}`
+})
 </script>
 
 <template>
@@ -36,7 +50,7 @@ const isSelected = computed(() => props.selectedFile === props.node.path)
         </motion.div>
 
         <FolderIcon class="w-4 h-4 text-amber-400" />
-        <span class="text-sm text-[var(--color-text-secondary)]">{{ node?.name }}</span>
+        <span class="text-sm text-[var(--color-text-secondary)]">{{ displayName }}</span>
       </button>
 
       <AnimatePresence>
@@ -64,7 +78,7 @@ const isSelected = computed(() => props.selectedFile === props.node.path)
 
     <template v-else>
       <button
-        class="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left"
+        class="cursor-pointer w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left"
         :class="
           isSelected
             ? 'bg-[var(--color-bg-tertiary)] text-white font-medium'
@@ -74,7 +88,7 @@ const isSelected = computed(() => props.selectedFile === props.node.path)
         @click="emit('selectFile', props.node.path)"
       >
         <FileIcon class="w-4 h-4" />
-        <span class="text-sm font-mono">{{ props.node.name }}</span>
+        <span class="text-sm font-mono">{{ displayName }}</span>
       </button>
     </template>
   </div>

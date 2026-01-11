@@ -148,37 +148,39 @@ const safeConcerns = computed(() => props.diff?.concerns ?? [])
         <div
           className="bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-xl overflow-hidden text-white"
         >
-          <div class="font-mono text-sm">
-            <div
-              v-for="line of lines"
-              :key="line.id"
-              class="flex items-center group transition-colors hover:bg-[var(--color-bg-tertiary)]"
-              :class="[styleFor(line.type).bg, styleFor(line.type).border]"
-            >
+          <div class="font-mono text-sm overflow-auto">
+            <div class="inline-block min-w-full">
               <div
-                v-if="line.type === 'hunk'"
-                class="px-4 py-2 bg-[var(--color-bg-tertiary)] border-b border-[var(--color-border)] w-full"
+                v-for="line of lines"
+                :key="line.id"
+                class="flex items-center group max-w-7xl transition-colors hover:bg-[var(--color-bg-tertiary)]"
+                :class="[styleFor(line.type).bg, styleFor(line.type).border]"
               >
-                <span className="text-xs text-[var(--color-text-dim)] font-medium">
-                  {{ line.content }}
-                </span>
-              </div>
-
-              <div v-else class="flex">
                 <div
-                  class="w-16 px-3 py-2 text-xs text-right select-none text-[var(--color-text-dim)] border-r border-[var(--color-border)]"
+                  v-if="line.type === 'hunk'"
+                  class="px-4 py-2 bg-[var(--color-bg-tertiary)] border-b border-[var(--color-border)] w-full"
                 >
-                  {{ line.lineNumber }}
+                  <span className="text-xs text-[var(--color-text-dim)] font-medium">
+                    {{ line.content }}
+                  </span>
                 </div>
 
-                <div
-                  class="w-8 px-2 py-2 text-xs text-center select-none text-[var(--color-text-dim)] border-r border-[var(--color-border)]"
-                >
-                  {{ styleFor(line.type).prefix }}
-                </div>
+                <div v-else class="flex">
+                  <div
+                    class="w-16 px-3 py-2 text-xs text-right select-none text-[var(--color-text-dim)] border-r border-[var(--color-border)]"
+                  >
+                    {{ line.lineNumber }}
+                  </div>
 
-                <div class="whitespace-pre flex-1 px-4 py-2" :class="styleFor(line.type).text">
-                  {{ line.content }}
+                  <div
+                    class="w-8 px-2 py-2 text-xs text-center select-none text-[var(--color-text-dim)] border-r border-[var(--color-border)]"
+                  >
+                    {{ styleFor(line.type).prefix }}
+                  </div>
+
+                  <div class="whitespace-pre flex-1 px-4 py-2" :class="styleFor(line.type).text">
+                    {{ line.content }}
+                  </div>
                 </div>
               </div>
             </div>

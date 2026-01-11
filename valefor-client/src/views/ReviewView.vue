@@ -29,6 +29,12 @@ const selectedFile = ref(null)
 
 const selectFile = (path) => {
   selectedFile.value = path
+
+  const element = document.getElementById(`file-${path}`)
+
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 }
 
 onMounted(async () => {
