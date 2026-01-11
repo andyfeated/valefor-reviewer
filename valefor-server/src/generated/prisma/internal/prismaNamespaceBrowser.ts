@@ -116,6 +116,8 @@ export const ReviewScalarFieldEnum = {
   sourceBranch: 'sourceBranch',
   targetBranch: 'targetBranch',
   author: 'author',
+  status: 'status',
+  failReason: 'failReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

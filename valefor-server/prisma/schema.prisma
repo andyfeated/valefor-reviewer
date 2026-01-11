@@ -61,8 +61,10 @@ model Review {
   pullRequestUrl String
   sourceBranch   String
   targetBranch   String
+  author         Json
 
-  author Json
+  status     ReviewStatus @default(pending)
+  failReason String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -93,6 +95,12 @@ model Diff {
 
   @@index([reviewId])
   @@index([criticalityLevel])
+}
+
+enum ReviewStatus {
+  pending
+  done
+  failed
 }
 
 enum CriticalityLevel {

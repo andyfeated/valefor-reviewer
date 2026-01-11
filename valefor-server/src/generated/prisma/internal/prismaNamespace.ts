@@ -785,6 +785,8 @@ export const ReviewScalarFieldEnum = {
   sourceBranch: 'sourceBranch',
   targetBranch: 'targetBranch',
   author: 'author',
+  status: 'status',
+  failReason: 'failReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -943,6 +945,20 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'ReviewStatus'
+ */
+export type EnumReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ReviewStatus[]'
+ */
+export type ListEnumReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewStatus[]'>
     
 
 

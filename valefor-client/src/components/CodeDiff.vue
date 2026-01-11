@@ -123,8 +123,16 @@ const safeConcerns = computed(() => props.diff?.concerns ?? [])
         <span class="font-mono text-sm text-[var(--color-text-primary)]">
           {{ props.diff.path }}
         </span>
+
         <span
-          v-if="!safeConcerns.length"
+          v-if="!props.diff?.isValid"
+          class="px-2 py-0.5 bg-yellow-500/10 border border-yellow-500/30 rounded-full text-xs font-medium text-yellow-400"
+        >
+          Skipped
+        </span>
+
+        <span
+          v-else-if="!safeConcerns.length"
           class="px-2 py-0.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-xs font-medium text-blue-400"
         >
           {{ safeConcerns.length }} suggestion(s)
@@ -183,6 +191,11 @@ const safeConcerns = computed(() => props.diff?.concerns ?? [])
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div v-if="!props.diff.isValid" class="px-5 pb-5 text-[var(--color-text-dim)]">
+              <p>File was skipped:</p>
+              <p>Skip reason: {{ props.diff.validationReason }}</p>
             </div>
           </div>
         </div>

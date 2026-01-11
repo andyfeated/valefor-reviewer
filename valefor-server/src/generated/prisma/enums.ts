@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const ReviewStatus = {
+  pending: 'pending',
+  done: 'done',
+  failed: 'failed'
+} as const
+
+export type ReviewStatus = (typeof ReviewStatus)[keyof typeof ReviewStatus]
+
+
 export const CriticalityLevel = {
   passed: 'passed',
   low: 'low',
