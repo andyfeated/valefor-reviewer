@@ -105,9 +105,8 @@ enum ReviewStatus {
 
 enum CriticalityLevel {
   passed
-  low
-  medium
-  high
+  minor
+  major
   critical
 }
 

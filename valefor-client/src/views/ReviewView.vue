@@ -6,6 +6,8 @@ import CodeDiff from '@/components/CodeDiff.vue'
 import { onMounted, ref, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
 
+const status = 'pending'
+
 const route = useRoute()
 const { id } = route.params
 
@@ -54,6 +56,11 @@ onMounted(async () => {
     console.error(err)
   }
 })
+
+const test = () => {
+  console.log('here')
+  reviewData.value = { ...reviewData.value, status: 'done' }
+}
 </script>
 
 <template>
@@ -67,6 +74,7 @@ onMounted(async () => {
         :transition="{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }"
         class="col-span-1"
       >
+        <button @click="test" class="text-white">test</button>
         <div class="sticky top-8">
           <FileTree :diffs="diffsData" :selectedFile="selectedFile" @selectFile="selectFile" />
         </div>
@@ -80,6 +88,7 @@ onMounted(async () => {
       >
         <CodeDiff
           v-for="diff in diffsData"
+          :status="reviewData.status"
           :key="diff.id"
           :diff="diff"
           :is-expanded="isExpanded(diff.id)"

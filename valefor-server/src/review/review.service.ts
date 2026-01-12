@@ -77,7 +77,7 @@ export class ReviewService {
         throw new Error(prValidation.reason);
       }
 
-      // Send diffs to LLM asynchronously
+      // Send diffs to LLM asynchronously (no await)
       this.dispatchSendDiffsToLlm(validDiffs);
 
       const pullRequestMeta = await githost.getPullRequest(

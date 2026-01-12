@@ -20,9 +20,8 @@ export type ReviewStatus = (typeof ReviewStatus)[keyof typeof ReviewStatus]
 
 export const CriticalityLevel = {
   passed: 'passed',
-  low: 'low',
-  medium: 'medium',
-  high: 'high',
+  minor: 'minor',
+  major: 'major',
   critical: 'critical'
 } as const
 

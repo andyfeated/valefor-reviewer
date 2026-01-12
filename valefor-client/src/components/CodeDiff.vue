@@ -1,5 +1,5 @@
 <script setup>
-import { ChevronDownIcon } from 'lucide-vue-next'
+import { ChevronDownIcon, Loader2Icon } from 'lucide-vue-next'
 import { motion, AnimatePresence } from 'motion-v'
 import { computed } from 'vue'
 
@@ -13,6 +13,9 @@ const props = defineProps({
   isExpanded: {
     type: Boolean,
     default: false,
+  },
+  status: {
+    type: String,
   },
 })
 
@@ -125,7 +128,20 @@ const safeConcerns = computed(() => props.diff?.concerns ?? [])
         </span>
 
         <span
-          v-if="!props.diff?.isValid"
+          v-if="props.status === 'pending'"
+          class="px-2 py-0.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-xs font-medium text-blue-400 flex items-center gap-1"
+        >
+          <motion.div
+            :animate="{ rotate: 360 }"
+            :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
+          >
+            <Loader2Icon class="w-3.5 h-3.5" />
+          </motion.div>
+          <span>Analyzing</span>
+        </span>
+
+        <span
+          v-else-if="!props.diff?.isValid"
           class="px-2 py-0.5 bg-yellow-500/10 border border-yellow-500/30 rounded-full text-xs font-medium text-yellow-400"
         >
           Skipped

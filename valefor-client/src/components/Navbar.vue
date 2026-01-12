@@ -1,5 +1,6 @@
 <script setup>
-import { RefreshCwIcon, SparklesIcon, ArrowLeftIcon } from 'lucide-vue-next'
+import { motion } from 'motion-v'
+import { RefreshCwIcon, SparklesIcon, ArrowLeftIcon, Loader2Icon } from 'lucide-vue-next'
 import ProfileDropdown from './ProfileDropdown.vue'
 import { useRouter } from 'vue-router'
 
@@ -67,16 +68,52 @@ const returnToHome = () => {
           v-if="!props.review"
           class="mt-3 w-140 h-4 bg-[var(--color-text-dim)] rounded-full animate-pulse opacity-65"
         />
-        <div v-else class="mt-3 flex items-center gap-4 text-sm text-[var(--color-text-dim)]">
+        <div v-else class="mt-3 flex items-center gap-3 text-sm text-[var(--color-text-dim)]">
           <span>3 file changes</span>
+
           <span>•</span>
-          <span>5 suggestions</span>
+          <motion.div
+            :v-if="props.review.status === 'pending'"
+            :animate="{ rotate: 360 }"
+            :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
+            class="mr-[-5px]"
+          >
+            <Loader2Icon class="text-rose-400 w-3.5 h-3.5" />
+          </motion.div>
+          <span class="text-rose-400">0 critical</span>
+
           <span>•</span>
-          <span class="text-rose-400">1 critical</span>
+          <motion.div
+            :v-if="props.review.status === 'pending'"
+            :animate="{ rotate: 360 }"
+            :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
+            class="mr-[-5px]"
+          >
+            <Loader2Icon class="text-orange-400 w-3.5 h-3.5" />
+          </motion.div>
+          <span class="text-orange-400">0 major</span>
+
           <span>•</span>
-          <span class="text-amber-400">3 warning</span>
+          <motion.div
+            :v-if="props.review.status === 'pending'"
+            :animate="{ rotate: 360 }"
+            :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
+            class="mr-[-5px]"
+          >
+            <Loader2Icon class="text-amber-400 w-3.5 h-3.5" />
+          </motion.div>
+          <span class="text-amber-400">0 minor</span>
+
           <span>•</span>
-          <span class="text-blue-400">1 suggestion</span>
+          <motion.div
+            :v-if="props.review.status === 'pending'"
+            :animate="{ rotate: 360 }"
+            :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
+            class="mr-[-5px]"
+          >
+            <Loader2Icon class="text-emerald-400 w-3.5 h-3.5" />
+          </motion.div>
+          <span class="text-emerald-400">0 passed</span>
         </div>
       </div>
     </div>
