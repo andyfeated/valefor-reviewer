@@ -73,7 +73,7 @@ const returnToHome = () => {
 
           <span>•</span>
           <motion.div
-            :v-if="props.review.status === 'pending'"
+            v-if="props.review.status === 'pending'"
             :animate="{ rotate: 360 }"
             :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
             class="mr-[-5px]"
@@ -84,7 +84,7 @@ const returnToHome = () => {
 
           <span>•</span>
           <motion.div
-            :v-if="props.review.status === 'pending'"
+            v-if="props.review.status === 'pending'"
             :animate="{ rotate: 360 }"
             :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
             class="mr-[-5px]"
@@ -95,7 +95,7 @@ const returnToHome = () => {
 
           <span>•</span>
           <motion.div
-            :v-if="props.review.status === 'pending'"
+            v-if="props.review.status === 'pending'"
             :animate="{ rotate: 360 }"
             :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
             class="mr-[-5px]"
@@ -106,7 +106,7 @@ const returnToHome = () => {
 
           <span>•</span>
           <motion.div
-            :v-if="props.review.status === 'pending'"
+            v-if="props.review.status === 'pending'"
             :animate="{ rotate: 360 }"
             :transition="{ duration: 1, repeat: Infinity, ease: 'linear' }"
             class="mr-[-5px]"
