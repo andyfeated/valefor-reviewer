@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar.vue'
 import { motion } from 'motion-v'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue-sonner'
 
 const router = useRouter()
 
@@ -40,8 +41,9 @@ const submit = async (e: Event) => {
 
     const review = await res.json()
     router.push(`/review/${review.id}`)
-  } catch (err) {
+  } catch (err: any) {
     console.error(err)
+    toast.error(err.message)
   }
 
   isAnalyzing.value = false

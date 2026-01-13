@@ -5,6 +5,7 @@ import FileTree from '@/components/FileTree.vue'
 import CodeDiff from '@/components/CodeDiff.vue'
 import { onMounted, onUnmounted, ref, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
+import { toast } from 'vue-sonner'
 
 const route = useRoute()
 const { id } = route.params
@@ -63,6 +64,7 @@ onMounted(async () => {
     }
   } catch (err) {
     console.error(err)
+    toast.error(err?.message || 'An error occured')
   }
 
   window.addEventListener('beforeunload', handleBeforeUnload)
@@ -98,6 +100,7 @@ const subscribeToStatusUpdate = () => {
     if (review.status === 'failed') {
       reviewData.value = { ...reviewData.value, status: review.status }
       console.error('An error occured')
+      toast.error('An error occured')
     }
 
     eventSource.close()
