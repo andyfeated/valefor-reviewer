@@ -87,7 +87,12 @@ const subscribeToStatusUpdate = () => {
         updatedAt: review.updatedAt,
         diffs: review.diffs ?? [],
       }
-      diffsData.value = review.diffs ?? []
+
+      const sortedDiffs = [...(review.diffs ?? [])].sort((a, b) => {
+        return Number(b.isValid) - Number(a.isValid)
+      })
+
+      diffsData.value = sortedDiffs ?? []
     }
 
     if (review.status === 'failed') {

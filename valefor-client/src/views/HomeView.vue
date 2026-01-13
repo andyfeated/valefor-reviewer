@@ -83,16 +83,11 @@ const submit = async (e: Event) => {
             <input
               type="url"
               required
-              placeholder="https://github.com/facebook/react/pull/28813"
+              placeholder="https://gitlab.com/microsoft/vscode/-/merge_requests/1234"
               class="w-full px-4 py-4 bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-lg text-[var(--color-text-primary)] focus:border-blue-500/50 outline-none font-mono text-sm"
               :disabled="isAnalyzing"
               v-model="prUrl"
             />
-
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2">
-              <GithubIcon class="w-5 h-5 text-[var(--color-text-dim)]" />
-              <GitlabIcon class="w-5 h-5 text-[var(--color-text-dim)]" />
-            </div>
           </div>
 
           <button
