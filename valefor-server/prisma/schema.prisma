@@ -93,6 +93,7 @@ model Diff {
 
   createdAt DateTime @default(now())
 
+  @@unique([reviewId, path])
   @@index([reviewId])
   @@index([criticalityLevel])
 }

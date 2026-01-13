@@ -8,6 +8,8 @@ import { DiffValidator } from './diff/diff-validator';
 import { MappedDiff } from 'src/git-host/strategy/git-host.strategy';
 import { PrValidator } from './pr/pr-validator';
 import { AIService } from 'src/ai/ai.service';
+import { CriticalityLevel, ReviewStatus } from 'src/generated/prisma/enums';
+import { Review } from 'src/generated/prisma/client';
 
 @Injectable()
 export class ReviewService {
@@ -77,9 +79,6 @@ export class ReviewService {
         throw new Error(prValidation.reason);
       }
 
-      // Send diffs to LLM asynchronously (no await)
-      this.dispatchSendDiffsToLlm(validDiffs);
-
       const pullRequestMeta = await githost.getPullRequest(
         projectId,
         pullRequestIid,
@@ -98,26 +97,54 @@ export class ReviewService {
 
       await this.createDiffs(review.id, diffsWithValidation);
 
+      // Send diffs to LLM asynchronously (no await)
+      this.dispatchSendDiffsToLlm(review.id, validDiffs);
+
       return review;
     } catch (err) {
       throw new BadRequestException(err.message || 'Failed to create review');
     }
   }
 
-  private async dispatchSendDiffsToLlm(validDiffs: MappedDiff[]) {
-    console.log('dispatched');
+  private async dispatchSendDiffsToLlm(
+    reviewId: string,
+    validDiffs: MappedDiff[],
+  ) {
     try {
       const sanitizedDiffs = validDiffs.map((diff) => ({
         path: diff.path,
         diff: diff.diff,
       }));
 
-      const concerns = await this.aiService.reviewDiffs(sanitizedDiffs);
-      //NOTE: update review status to done
-      console.log(concerns);
+      const aiOutput = await this.aiService.reviewDiffs(sanitizedDiffs);
+
+      const match = aiOutput.match(/```json\s*([\s\S]*?)```/i);
+      if (!match) throw new Error('Failed to extract JSON from AI output');
+
+      const diffsWithConcerns: {
+        path: string;
+        concerns: string[];
+        criticality: string;
+      }[] = JSON.parse(match[1]);
+
+      await Promise.all(
+        diffsWithConcerns.map((diff) =>
+          this.updateDiffConcerns(
+            reviewId,
+            diff.path,
+            diff.concerns,
+            diff.criticality as CriticalityLevel,
+          ),
+        ),
+      );
+
+      await this.updateReviewStatus(reviewId, ReviewStatus.done);
     } catch (error) {
-      //NOTE: update review status to error
-      console.error(error);
+      await this.updateReviewStatus(
+        reviewId,
+        ReviewStatus.failed,
+        error?.message || 'Fail Reason cannot be found',
+      );
     }
   }
 
@@ -167,6 +194,42 @@ export class ReviewService {
     const review = this.prismaService.review.findFirst({
       where: { id, userId },
       include: { diffs: true },
+    });
+
+    return review;
+  }
+
+  private async updateDiffConcerns(
+    reviewId: string,
+    path: string,
+    concerns: string[],
+    criticalityLevel: CriticalityLevel,
+  ) {
+    return this.prismaService.diff.update({
+      where: { reviewId_path: { reviewId, path } },
+      data: {
+        concerns,
+        criticalityLevel,
+      },
+    });
+  }
+
+  private async updateReviewStatus(
+    id: string,
+    status: ReviewStatus,
+    failReason?: string,
+  ) {
+    const data: Partial<Review> = {
+      status,
+    };
+
+    if (failReason) {
+      data.failReason = failReason;
+    }
+
+    const review = this.prismaService.review.update({
+      where: { id },
+      data,
     });
 
     return review;

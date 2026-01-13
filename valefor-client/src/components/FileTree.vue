@@ -98,7 +98,6 @@ const toggleFolder = (path) => {
     next.add(path)
   }
 
-  console.log(next)
   collapsedFolders.value = next
 }
 

@@ -3,13 +3,13 @@ import { motion } from 'motion-v'
 import Navbar from '@/components/Navbar.vue'
 import FileTree from '@/components/FileTree.vue'
 import CodeDiff from '@/components/CodeDiff.vue'
-import { onMounted, ref, toRaw } from 'vue'
+import { onMounted, onUnmounted, ref, toRaw } from 'vue'
 import { useRoute } from 'vue-router'
-
-const status = 'pending'
 
 const route = useRoute()
 const { id } = route.params
+
+let eventSource = null
 
 const reviewData = ref(null)
 const diffsData = ref([])
@@ -50,17 +50,50 @@ onMounted(async () => {
     }
 
     const review = await res.json()
+
     reviewData.value = review
     diffsData.value = review.diffs ?? []
+
+    if (review.status === 'pending') {
+      subscribeToStatusUpdate()
+    }
   } catch (err) {
     console.error(err)
   }
+
+  window.addEventListener('beforeunload', handleBeforeUnload)
 })
+
+const subscribeToStatusUpdate = () => {
+  eventSource = new EventSource(`${import.meta.env.VITE_BASE_API_URL}/review/${id}/events`, {
+    withCredentials: true,
+  })
+
+  eventSource.onmessage = (event) => {
+    console.log('SSE working', event.data)
+  }
+}
 
 const test = () => {
   console.log('here')
   reviewData.value = { ...reviewData.value, status: 'done' }
 }
+
+const handleBeforeUnload = () => {
+  if (eventSource) {
+    eventSource.close()
+    eventSource = null
+  }
+}
+
+onUnmounted(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+
+  if (eventSource) {
+    eventSource.close()
+    eventSource = null
+  }
+})
 </script>
 
 <template>

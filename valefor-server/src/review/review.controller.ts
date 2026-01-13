@@ -7,12 +7,21 @@ import {
   Param,
   Post,
   Req,
+  Sse,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { OAuthTokenGuard } from 'src/auth/oauth/oauth.guard';
 import { ReviewService } from './review.service';
 import express from 'express';
+import {
+  distinctUntilChanged,
+  interval,
+  map,
+  Observable,
+  switchMap,
+  takeWhile,
+} from 'rxjs';
 
 @Controller('review')
 export class ReviewController {
@@ -54,5 +63,26 @@ export class ReviewController {
     }
 
     return review;
+  }
+
+  @UseGuards(AuthGuard)
+  @Sse(':id/events')
+  reviewEvents(
+    @Param('id') id: string,
+    @Req() req: express.Request,
+  ): Observable<MessageEvent> {
+    const POLL_INTERVAL_MS = 1000;
+    const userId = req.user.sub;
+
+    return interval(POLL_INTERVAL_MS).pipe(
+      switchMap(() => this.reviewService.getReview(id, userId)),
+      distinctUntilChanged((prev, cur) => prev.status === cur.status),
+      takeWhile((review) => review.status === 'pending', true),
+      map((review) => {
+        return {
+          data: { status: review.status, updatedAt: review.updatedAt },
+        } as MessageEvent;
+      }),
+    );
   }
 }
