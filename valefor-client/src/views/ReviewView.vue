@@ -3,7 +3,7 @@ import { motion } from 'motion-v'
 import Navbar from '@/components/Navbar.vue'
 import FileTree from '@/components/FileTree.vue'
 import CodeDiff from '@/components/CodeDiff.vue'
-import { onMounted, onUnmounted, ref, toRaw } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'vue-sonner'
 
