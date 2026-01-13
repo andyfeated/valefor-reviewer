@@ -80,7 +80,11 @@ export class ReviewController {
       takeWhile((review) => review.status === 'pending', true),
       map((review) => {
         return {
-          data: { status: review.status, updatedAt: review.updatedAt },
+          data: {
+            status: review.status,
+            updatedAt: review.updatedAt,
+            diffs: review.diffs,
+          },
         } as MessageEvent;
       }),
     );

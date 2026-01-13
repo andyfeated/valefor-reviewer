@@ -1,5 +1,5 @@
 <script setup>
-import { ChevronDownIcon, Loader2Icon } from 'lucide-vue-next'
+import { ChevronDownIcon, Loader2Icon, SparklesIcon } from 'lucide-vue-next'
 import { motion, AnimatePresence } from 'motion-v'
 import { computed } from 'vue'
 
@@ -18,6 +18,13 @@ const props = defineProps({
     type: String,
   },
 })
+
+const criticalityColorMap = {
+  critical: 'rose',
+  major: 'orange',
+  minor: 'amber',
+  passed: 'emerald',
+}
 
 const emits = defineEmits(['toggle-collapse'])
 
@@ -47,6 +54,14 @@ const styles = {
     prefix: ' ',
   },
 }
+
+const formatConcern = (text) => {
+  return text.replace(
+    /`([^`]+)`/g,
+    '<code class="px-1.5 py-0.5 bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] rounded text-xs font-mono text-[var(--color-text-primary)]">$1</code>',
+  )
+}
+
 const styleFor = (type) => styles[type]
 
 const parseDiff = (diff) => {
@@ -109,7 +124,6 @@ const parseDiff = (diff) => {
 }
 
 const lines = computed(() => parseDiff(props.diff.diff))
-const safeConcerns = computed(() => props.diff?.concerns ?? [])
 </script>
 
 <template>
@@ -148,10 +162,31 @@ const safeConcerns = computed(() => props.diff?.concerns ?? [])
         </span>
 
         <span
-          v-else-if="!safeConcerns.length"
-          class="px-2 py-0.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-xs font-medium text-blue-400"
+          v-else-if="props.diff.criticalityLevel === 'passed'"
+          class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-xs font-medium text-emerald-400"
         >
-          {{ safeConcerns.length }} suggestion(s)
+          Passed
+        </span>
+
+        <span
+          v-else-if="props.diff.criticalityLevel === 'critical'"
+          class="px-2 py-0.5 bg-rose-500/10 border border-rose-500/30 rounded-full text-xs font-medium text-rose-400"
+        >
+          Critical
+        </span>
+
+        <span
+          v-else-if="props.diff.criticalityLevel === 'major'"
+          class="px-2 py-0.5 bg-orange-500/10 border border-orange-500/30 rounded-full text-xs font-medium text-orange-400"
+        >
+          Major
+        </span>
+
+        <span
+          v-else-if="props.diff.criticalityLevel === 'minor'"
+          class="px-2 py-0.5 bg-amber-500/10 border border-amber-500/30 rounded-full text-xs font-medium text-amber-400"
+        >
+          Minor
         </span>
       </div>
 
@@ -217,5 +252,42 @@ const safeConcerns = computed(() => props.diff?.concerns ?? [])
         </div>
       </motion.div>
     </AnimatePresence>
+
+    <div v-if="props?.diff?.concerns?.length" class="p-7 bg-[var(--color-bg-primary)]">
+      <div class="flex items-center gap-2 mb-4">
+        <SparklesIcon class="w-4 h-4 text-blue-400" />
+        <h3 class="text-sm font-semibold text-[var(--color-text-primary)]">AI Suggestions</h3>
+      </div>
+
+      <ul class="space-y-2">
+        <motion.li
+          v-for="concern in props.diff.concerns"
+          class="flex items-start gap-3 pl-3 py-2 border-l-2"
+          :class="`border-${criticalityColorMap[props.diff.criticalityLevel]}-500/30`"
+        >
+          <span v-if="props.diff.criticalityLevel === 'critical'" :class="`text-rose-400/70`">
+            •
+          </span>
+
+          <span v-if="props.diff.criticalityLevel === 'major'" :class="`text-orange-400/70`">
+            •
+          </span>
+
+          <span v-if="props.diff.criticalityLevel === 'minor'" :class="`text-amber-400/70`">
+            •
+          </span>
+
+          <span v-if="props.diff.criticalityLevel === 'passed'" :class="`text-emerald-400/70`">
+            •
+          </span>
+
+          <span
+            class="text-sm text-[var(--color-text-secondary)] leading-relaxed flex-1"
+            v-html="formatConcern(concern)"
+          >
+          </span>
+        </motion.li>
+      </ul>
+    </div>
   </div>
 </template>

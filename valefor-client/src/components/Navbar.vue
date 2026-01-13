@@ -3,6 +3,7 @@ import { motion } from 'motion-v'
 import { RefreshCwIcon, SparklesIcon, ArrowLeftIcon, Loader2Icon } from 'lucide-vue-next'
 import ProfileDropdown from './ProfileDropdown.vue'
 import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 
 const router = useRouter()
 
@@ -22,6 +23,19 @@ const props = defineProps({
 const returnToHome = () => {
   router.push('/')
 }
+
+const criticalCount = computed(
+  () => props.review.diffs.filter((d) => d?.criticalityLevel === 'critical')?.length || 0,
+)
+const majorCount = computed(
+  () => props.review.diffs.filter((d) => d?.criticalityLevel === 'major')?.length || 0,
+)
+const minorCount = computed(
+  () => props.review.diffs.filter((d) => d?.criticalityLevel === 'minor')?.length || 0,
+)
+const passedCount = computed(
+  () => props.review.diffs.filter((d) => d?.criticalityLevel === 'passed')?.length || 0,
+)
 </script>
 
 <template>
@@ -69,7 +83,7 @@ const returnToHome = () => {
           class="mt-3 w-140 h-4 bg-[var(--color-text-dim)] rounded-full animate-pulse opacity-65"
         />
         <div v-else class="mt-3 flex items-center gap-3 text-sm text-[var(--color-text-dim)]">
-          <span>3 file changes</span>
+          <span>{{ props.review.diffs.length }} file changes</span>
 
           <span>•</span>
           <motion.div
@@ -80,7 +94,7 @@ const returnToHome = () => {
           >
             <Loader2Icon class="text-rose-400 w-3.5 h-3.5" />
           </motion.div>
-          <span class="text-rose-400">0 critical</span>
+          <span class="text-rose-400">{{ criticalCount }} critical</span>
 
           <span>•</span>
           <motion.div
@@ -91,7 +105,7 @@ const returnToHome = () => {
           >
             <Loader2Icon class="text-orange-400 w-3.5 h-3.5" />
           </motion.div>
-          <span class="text-orange-400">0 major</span>
+          <span class="text-orange-400">{{ majorCount }} major</span>
 
           <span>•</span>
           <motion.div
@@ -102,7 +116,7 @@ const returnToHome = () => {
           >
             <Loader2Icon class="text-amber-400 w-3.5 h-3.5" />
           </motion.div>
-          <span class="text-amber-400">0 minor</span>
+          <span class="text-amber-400">{{ minorCount }} minor</span>
 
           <span>•</span>
           <motion.div
@@ -113,7 +127,7 @@ const returnToHome = () => {
           >
             <Loader2Icon class="text-emerald-400 w-3.5 h-3.5" />
           </motion.div>
-          <span class="text-emerald-400">0 passed</span>
+          <span class="text-emerald-400">{{ passedCount }} passed</span>
         </div>
       </div>
     </div>

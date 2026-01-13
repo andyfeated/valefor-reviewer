@@ -91,21 +91,6 @@ async function loginWithOauth(provider: ProviderName) {
         class="space-y-4 mb-8"
       >
         <motion.button
-          :while-hover="{ scale: 1.03 }"
-          :while-press="{ scale: 0.95 }"
-          class="relative w-full cursor-pointer flex items-center gap-3 px-4 py-4 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] hover:border-blue-500/50 rounded-xl text-[var(--color-text-primary)] font-medium transition-all overflow-hidden"
-        >
-          <motion.div
-            :animate="{ x: ['-100%', '100%'] }"
-            :transition="{ duration: 3, repeat: Infinity, ease: 'linear' }"
-            class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent"
-          />
-          <GithubIcon class="w-5 h-5" />
-          <span class="flex-1 text-left">Continue with Github</span>
-          <ArrowRightIcon class="w-4 h-4 text-[var(--color-text-dim)] mr-1" />
-        </motion.button>
-
-        <motion.button
           @click="loginWithOauth('gitlab')"
           :while-hover="{ scale: 1.03 }"
           :while-press="{ scale: 0.95 }"
@@ -117,7 +102,21 @@ async function loginWithOauth(provider: ProviderName) {
             class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent"
           />
           <GitlabIcon class="w-5 h-5" />
-          <span class="flex-1 text-left">Continue with Gitlab</span>
+          <span class="flex-1 text-left">Continue with GitLab</span>
+          <ArrowRightIcon class="w-4 h-4 text-[var(--color-text-dim)] mr-1" />
+        </motion.button>
+
+        <motion.button
+          disabled
+          class="relative w-full cursor-not-allowed flex items-center gap-3 px-4 py-4 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] font-medium transition-all overflow-hidden"
+        >
+          <motion.div
+            :animate="{ x: ['-100%', '100%'] }"
+            :transition="{ duration: 3, repeat: Infinity, ease: 'linear' }"
+            class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent"
+          />
+          <GithubIcon class="w-5 h-5" />
+          <span class="flex-1 text-left">GitHub support coming soon</span>
           <ArrowRightIcon class="w-4 h-4 text-[var(--color-text-dim)] mr-1" />
         </motion.button>
       </motion.div>

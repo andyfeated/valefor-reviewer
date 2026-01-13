@@ -7,9 +7,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const prUrl = ref<string>(
-  'https://gitlab.com/theoria-medical/se/tm-institute-server/-/merge_requests/173',
-)
+const prUrl = ref<string>('')
 const isAnalyzing = ref<boolean>(false)
 
 const recentReviews = [
@@ -65,7 +63,7 @@ const submit = async (e: Event) => {
           Get instant AI feedback on your pull requests
         </h2>
         <p class="text-[var(--color-text-secondary)] text-center">
-          Paste a GitHub or GitLab URL to recieve intelligent code review suggestions
+          Paste a GitHub or GitLab URL to recieve code review suggestions
         </p>
       </motion.div>
 

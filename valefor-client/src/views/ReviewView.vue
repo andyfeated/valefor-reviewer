@@ -51,8 +51,12 @@ onMounted(async () => {
 
     const review = await res.json()
 
+    const sortedDiffs = [...(review.diffs ?? [])].sort((a, b) => {
+      return Number(b.isValid) - Number(a.isValid)
+    })
+
     reviewData.value = review
-    diffsData.value = review.diffs ?? []
+    diffsData.value = sortedDiffs ?? []
 
     if (review.status === 'pending') {
       subscribeToStatusUpdate()
@@ -70,13 +74,30 @@ const subscribeToStatusUpdate = () => {
   })
 
   eventSource.onmessage = (event) => {
-    console.log('SSE working', event.data)
-  }
-}
+    const review = JSON.parse(event.data)
 
-const test = () => {
-  console.log('here')
-  reviewData.value = { ...reviewData.value, status: 'done' }
+    if (review.status === 'pending') {
+      return
+    }
+
+    if (review.status === 'done') {
+      reviewData.value = {
+        ...reviewData.value,
+        status: review.status,
+        updatedAt: review.updatedAt,
+        diffs: review.diffs ?? [],
+      }
+      diffsData.value = review.diffs ?? []
+    }
+
+    if (review.status === 'failed') {
+      reviewData.value = { ...reviewData.value, status: review.status }
+      console.error('An error occured')
+    }
+
+    eventSource.close()
+    eventSource = null
+  }
 }
 
 const handleBeforeUnload = () => {
@@ -107,7 +128,6 @@ onUnmounted(() => {
         :transition="{ duration: 0.4, delay: 0.1, ease: [0.22, 1, 0.36, 1] }"
         class="col-span-1"
       >
-        <button @click="test" class="text-white">test</button>
         <div class="sticky top-8">
           <FileTree :diffs="diffsData" :selectedFile="selectedFile" @selectFile="selectFile" />
         </div>
