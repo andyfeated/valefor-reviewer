@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { ClockIcon, ArrowRightIcon, GitlabIcon, GithubIcon } from 'lucide-vue-next'
+import {
+  ClockIcon,
+  ArrowRightIcon,
+  XIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+} from 'lucide-vue-next'
 import Navbar from '@/components/Navbar.vue'
 import { motion } from 'motion-v'
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 
@@ -11,12 +17,68 @@ const router = useRouter()
 const prUrl = ref<string>('')
 const isAnalyzing = ref<boolean>(false)
 
-const recentReviews = [
-  { url: 'github.com/vercel/next.js/pull/1201', time: '2 hours ago', suggestions: 8 },
-  { url: 'gitlab.com/microsoft/vscode/pull/84523', time: '8 hours ago', suggestions: 2 },
-  { url: 'github.com/netflix/next.js/pull/4123', time: '2 hours ago', suggestions: 8 },
-  { url: 'gitlab.com/google/vscode/pull/12314', time: '8 hours ago', suggestions: 2 },
-]
+const reviews = ref<any>([])
+const totalCount = ref<number>(0)
+const totalPages = computed(() => Math.ceil(totalCount.value / defaultPageSize))
+
+const currentPage = ref(1)
+const defaultPageSize = 2
+
+const timeAgo = (dateString: string | Date) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+
+  const diffSeconds = Math.floor(diffMs / 1000)
+  const diffMinutes = Math.floor(diffSeconds / 60)
+  const diffHours = Math.floor(diffMinutes / 60)
+  const diffDays = Math.floor(diffHours / 24)
+
+  if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+  if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+  if (diffMinutes > 0) return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`
+  return 'Just now'
+}
+
+const suggestionsCount = (diffs: any[]) => {
+  const validDiffs = diffs.filter((d) => d.isValid)
+  return validDiffs.length
+}
+
+const fetchReviews = async (page = 1, pageSize = defaultPageSize) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_BASE_API_URL}/review?page=${page}&pageSize=${pageSize}`,
+      {
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      },
+    )
+
+    if (!res.ok) {
+      const errorData = await res.json()
+      throw new Error(errorData?.message || errorData?.error || 'An error occured')
+    }
+
+    const data = await res.json()
+    console.log('data', data, page, defaultPageSize)
+
+    currentPage.value = page
+    reviews.value = data.items
+    totalCount.value = data.totalCount
+  } catch (err: any) {
+    console.error(err)
+    toast.error(err.message)
+  }
+}
+
+const pushToReview = (id: string) => {
+  router.push(`/review/${id}`)
+}
+
+onMounted(async () => {
+  await fetchReviews(currentPage.value, defaultPageSize)
+})
 
 const submit = async (e: Event) => {
   try {
@@ -131,29 +193,77 @@ const submit = async (e: Event) => {
         </div>
 
         <motion.div
-          v-for="(item, index) in recentReviews"
-          :key="item.url"
+          v-for="(item, index) in reviews"
+          :key="item.id"
           :initial="{ x: -20, opacity: 0 }"
           :animate="{ x: 0, opacity: 1 }"
-          :transition="{ duration: 0.5, delay: 0.3 + index * 0.05, ease: [0.22, 1, 0.36, 1] }"
-          class="cursor-pointer w-full flex items-center justify-between mb-3 p-4 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-border-bright)] hover:bg-[var(--color-bg-tertiary)] text-left group"
+          :transition="{ duration: 0.5, delay: 0.1 + index * 0.05, ease: [0.22, 1, 0.36, 1] }"
+          class="group flex items-stretch"
         >
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-mono text-[var(--color-text-primary)] group-hover:text-blue-400">
-              {{ item.url }}
-            </p>
-            <p class="text-xs text-[var(--color-text-dim)] mt-2">{{ item.time }}</p>
-          </div>
+          <button
+            class="cursor-pointer flex-1 flex items-center justify-between mb-3 p-4 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-l-lg border-r-0 hover:border-[var(--color-border-bright)] hover:bg-[var(--color-bg-tertiary)] text-left group/read"
+            @click="pushToReview(item.id)"
+          >
+            <div class="flex-1 min-w-0">
+              <p
+                class="text-sm font-mono text-[var(--color-text-primary)] group-hover:text-blue-400"
+              >
+                {{ item.pullRequestUrl }}
+              </p>
 
-          <div class="flex items-center gap-3">
-            <span class="text-sm text-[var(--color-text-secondary)]"
-              >{{ item.suggestions }} suggestions
-            </span>
-          </div>
+              <p class="text-xs text-[var(--color-text-dim)] mt-2">{{ timeAgo(item.createdAt) }}</p>
+            </div>
 
-          <ArrowRightIcon
-            class="w-4 h-4 text-[var(--color-text-dim)] group-hover:text-blue-400 ml-3"
-          />
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-[var(--color-text-secondary)]">
+                {{ suggestionsCount(item.diffs) }} suggestions
+              </span>
+            </div>
+
+            <ArrowRightIcon
+              class="w-4 h-4 text-[var(--color-text-dim)] group-hover/read:text-blue-400 ml-3"
+            />
+          </button>
+
+          <button
+            class="cursor-pointer flex items-center justify-center w-12 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-r-lg hover:border-rose-500/50 hover:bg-rose-500/5 transition-all group/delete mb-3"
+          >
+            <XIcon
+              class="w-4 h-4 text-[var(--color-text-dim)] group-hover/delete:text-rose-400 transition-colors"
+            />
+          </button>
+        </motion.div>
+
+        <motion.div
+          :initial="{ opacity: 0 }"
+          :animate="{ opacity: 1 }"
+          :transition="{ delay: 0.3 }"
+          v-if="reviews.length > 0"
+          class="flex items-center justify-between px-2"
+        >
+          <span class="text-xs text-[var(--color-text-dim)]"
+            >Page {{ currentPage }} of {{ totalPages }}</span
+          >
+
+          <div class="flex items-center gap-1">
+            <button
+              class="cursor-pointer p-1.5 rounded-md text-[var(--color-text-dim)] hover:text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              aria-label="Previous page"
+              :disabled="currentPage === 1"
+              @click="fetchReviews(currentPage - 1, defaultPageSize)"
+            >
+              <ChevronLeftIcon class="w-4 h-4" />
+            </button>
+
+            <button
+              class="cursor-pointer p-1.5 rounded-md text-[var(--color-text-dim)] hover:text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              aria-label="Next page"
+              :disabled="currentPage === totalPages"
+              @click="fetchReviews(currentPage + 1, defaultPageSize)"
+            >
+              <ChevronRightIcon class="w-4 h-4" />
+            </button>
+          </div>
         </motion.div>
       </motion.div>
     </div>

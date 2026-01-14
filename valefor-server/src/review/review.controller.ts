@@ -6,6 +6,7 @@ import {
   NotFoundException,
   Param,
   Post,
+  Query,
   Req,
   Sse,
   UseGuards,
@@ -68,6 +69,24 @@ export class ReviewController {
     }
 
     return review;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('')
+  async getReviews(
+    @Req() req: express.Request,
+    @Query('page') page: string,
+    @Query('pageSize') pageSize: string,
+  ) {
+    const userId = req.user.sub;
+
+    const reviews = await this.reviewService.getReviews(
+      userId,
+      Number(page) || 1,
+      Number(pageSize) || 4,
+    );
+
+    return reviews;
   }
 
   @UseGuards(AuthGuard)

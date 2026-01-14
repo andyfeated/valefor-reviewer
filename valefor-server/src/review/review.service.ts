@@ -27,6 +27,29 @@ export class ReviewService {
     private aiService: AIService,
   ) {}
 
+  async getReviews(userId: string, page = 1, pageSize = 4) {
+    try {
+      const items = await this.prismaService.review.findMany({
+        where: { userId },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: { createdAt: 'desc' },
+        include: { diffs: { select: { isValid: true } } },
+      });
+
+      const totalCount = await this.prismaService.review.count({
+        where: { userId },
+      });
+
+      return {
+        totalCount,
+        items,
+      };
+    } catch (err) {
+      throw new BadRequestException(err?.message || 'Failed to fetch reviews');
+    }
+  }
+
   async reviewPullRequest(prUrl: string, userId: string, role: Role) {
     try {
       // User Validators
@@ -158,7 +181,7 @@ export class ReviewService {
   }
 
   private async assertDailyReviewLimit(userId: string, role: Role) {
-    const MAX_REVIEW_PER_DAY = 2;
+    const MAX_REVIEW_PER_DAY = 5;
 
     if (role !== Role.free_user) {
       return;
