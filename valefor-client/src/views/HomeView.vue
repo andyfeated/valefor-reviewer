@@ -22,7 +22,7 @@ const totalCount = ref<number>(0)
 const totalPages = computed(() => Math.ceil(totalCount.value / defaultPageSize))
 
 const currentPage = ref(1)
-const defaultPageSize = 2
+const defaultPageSize = 3
 
 const timeAgo = (dateString: string | Date) => {
   const date = new Date(dateString)
@@ -191,6 +191,57 @@ const submit = async (e: Event) => {
           <ClockIcon class="w-4 h-4 text-[var(--color-text-dim)]" />
           <h3 class="font-semibold text-sm text-[var(--color-text-secondary)]">Recent Reviews</h3>
         </div>
+
+        <motion.div
+          v-if="!reviews.length"
+          :initial="{ opacity: 0, y: 10 }"
+          :animate="{ opacity: 1, y: 0 }"
+          :transition="{ duration: 0.3 }"
+          class="py-12 text-center"
+        >
+          <motion.div
+            :initial="{ scale: 0.9, opacity: 0 }"
+            :animate="{ scale: 1, opacity: 1 }"
+            :transition="{ delay: 0.1, duration: 0.4 }"
+            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--color-bg-secondary)] border border-[var(--color-border)] mb-4"
+          >
+            <ClockIcon class="w-7 h-7 text-[var(--color-text-dim)]" />
+          </motion.div>
+          <motion.h4
+            :initial="{
+              opacity: 0,
+              y: 5,
+            }"
+            :animate="{
+              opacity: 1,
+              y: 0,
+            }"
+            :transition="{
+              delay: 0.2,
+              duration: 0.3,
+            }"
+            className="text-base font-medium text-[var(--color-text-primary)] mb-2"
+          >
+            No recent reviews
+          </motion.h4>
+          <motion.p
+            :initial="{
+              opacity: 0,
+              y: 5,
+            }"
+            :animate="{
+              opacity: 1,
+              y: 0,
+            }"
+            :transition="{
+              delay: 0.3,
+              duration: 0.3,
+            }"
+            className="text-sm text-[var(--color-text-dim)] max-w-xs mx-auto"
+          >
+            Your reviewed pull requests will appear here
+          </motion.p>
+        </motion.div>
 
         <motion.div
           v-for="(item, index) in reviews"

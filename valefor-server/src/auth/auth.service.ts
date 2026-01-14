@@ -50,7 +50,7 @@ export class AuthService {
       const jwtToken = jwt.sign(
         { sub: user.id, email: user.email, role: user.role },
         process.env.JWT_SECRET,
-        { expiresIn: '4h' },
+        { expiresIn: '2h' },
       );
 
       // res.cookie sends back to browser
