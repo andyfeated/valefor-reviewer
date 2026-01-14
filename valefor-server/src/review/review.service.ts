@@ -8,8 +8,13 @@ import { DiffValidator } from './diff/diff-validator';
 import { MappedDiff } from 'src/git-host/strategy/git-host.strategy';
 import { PrValidator } from './pr/pr-validator';
 import { AIService } from 'src/ai/ai.service';
-import { CriticalityLevel, ReviewStatus } from 'src/generated/prisma/enums';
+import {
+  CriticalityLevel,
+  ReviewStatus,
+  Role,
+} from 'src/generated/prisma/enums';
 import { Review } from 'src/generated/prisma/client';
+import { getDailyWindowUTC } from 'src/utils/getDailyWindowUtc';
 
 @Injectable()
 export class ReviewService {
@@ -22,21 +27,25 @@ export class ReviewService {
     private aiService: AIService,
   ) {}
 
-  async reviewPullRequest(prUrl: string, userId: string) {
-    const provider = extractProviderFromPrUrl(prUrl);
-
-    const oauthIdentity = await this.userService.getOAuthIdentity(
-      userId,
-      provider,
-    );
-    const accessToken = oauthIdentity.accessToken;
-
-    const githost = this.githostFactory.create(provider);
-
-    const { projectId, pullRequestIid } =
-      githost.extractPullRequestDetailsFromUrl(prUrl);
-
+  async reviewPullRequest(prUrl: string, userId: string, role: Role) {
     try {
+      // User Validators
+      await this.assertDailyReviewLimit(userId, role);
+
+      // Githost Logic
+      const provider = extractProviderFromPrUrl(prUrl);
+
+      const oauthIdentity = await this.userService.getOAuthIdentity(
+        userId,
+        provider,
+      );
+
+      const accessToken = oauthIdentity.accessToken;
+      const githost = this.githostFactory.create(provider);
+
+      const { projectId, pullRequestIid } =
+        githost.extractPullRequestDetailsFromUrl(prUrl);
+
       const existingReview = await this.getReviewByProjectIdAndAndPrId(
         userId,
         projectId,
@@ -148,6 +157,26 @@ export class ReviewService {
     }
   }
 
+  private async assertDailyReviewLimit(userId: string, role: Role) {
+    const MAX_REVIEW_PER_DAY = 2;
+
+    if (role !== Role.free_user) {
+      return;
+    }
+
+    const { start, end } = getDailyWindowUTC();
+
+    const reviews = await this.prismaService.review.findMany({
+      where: { userId, createdAt: { gte: start, lt: end } },
+      select: { id: true, createdAt: true },
+    });
+
+    if (reviews.length >= MAX_REVIEW_PER_DAY) {
+      throw new BadRequestException(
+        `Daily review limit reached (${MAX_REVIEW_PER_DAY} PRs per day, resets at 12:00 UTC)`,
+      );
+    }
+  }
   private async createReview(
     pullRequestMeta: NormalizedPullRequest,
     userId: string,
@@ -160,6 +189,7 @@ export class ReviewService {
         userId,
         pullRequestUrl: prUrl,
         providerProjectId: projectId,
+        createdAt: new Date(),
       },
     });
   }

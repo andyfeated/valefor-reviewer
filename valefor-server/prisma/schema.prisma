@@ -21,6 +21,7 @@ model User {
   avatarUrl       String
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  role            Role            @default(free_user)
   oauthIdentities OAuthIdentity[]
   reviews         Review[]
 }
@@ -96,6 +97,12 @@ model Diff {
   @@unique([reviewId, path])
   @@index([reviewId])
   @@index([criticalityLevel])
+}
+
+enum Role {
+  admin
+  premium_user
+  free_user
 }
 
 enum ReviewStatus {

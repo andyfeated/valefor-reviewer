@@ -36,6 +36,7 @@ export class ReviewController {
   ) {
     const { prUrl } = body;
     const userId = req.user.sub;
+    const role = req.user.role;
 
     const prUrlObj = new URL(prUrl ?? null);
 
@@ -47,7 +48,11 @@ export class ReviewController {
       throw new BadRequestException('Invalid PR URL');
     }
 
-    const review = await this.reviewService.reviewPullRequest(prUrl, userId);
+    const review = await this.reviewService.reviewPullRequest(
+      prUrl,
+      userId,
+      role,
+    );
     return review;
   }
 

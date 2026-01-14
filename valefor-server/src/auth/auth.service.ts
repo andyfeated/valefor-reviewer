@@ -48,7 +48,7 @@ export class AuthService {
       const user = await this.userService.getOrCreateUser(dto);
 
       const jwtToken = jwt.sign(
-        { sub: user.id, email: user.email },
+        { sub: user.id, email: user.email, role: user.role },
         process.env.JWT_SECRET,
         { expiresIn: '4h' },
       );

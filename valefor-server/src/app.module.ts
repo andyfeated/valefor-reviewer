@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { PullRequestModule } from './pull-request/pull-request.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
@@ -14,7 +13,6 @@ import { ReviewModule } from './review/review.module';
     BaseModule,
     ConfigModule.forRoot({ isGlobal: true }),
     HealthModule,
-    PullRequestModule,
     ReviewModule,
     UserModule,
   ],
