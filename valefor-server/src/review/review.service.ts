@@ -129,13 +129,11 @@ export class ReviewService {
 
       await this.createDiffs(review.id, diffsWithValidation);
 
-      console.log('dispatched');
       // Send diffs to LLM asynchronously (no await)
       this.dispatchSendDiffsToLlm(review.id, validDiffs);
 
       return review;
     } catch (err) {
-      console.log('err', err);
       throw new BadRequestException(err.message || 'Failed to create review');
     }
   }

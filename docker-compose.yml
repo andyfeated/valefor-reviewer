@@ -1,3 +1,4 @@
+# Only used for local dev
 services:
   server:
     build: 
