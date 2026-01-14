@@ -67,12 +67,11 @@ model Review {
   status     ReviewStatus @default(pending)
   failReason String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   diffs Diff[]
-
-  @@unique([provider, pullRequestId])
 }
 
 model Diff {

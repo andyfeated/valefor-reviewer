@@ -61,11 +61,32 @@ const fetchReviews = async (page = 1, pageSize = defaultPageSize) => {
     }
 
     const data = await res.json()
-    console.log('data', data, page, defaultPageSize)
 
     currentPage.value = page
     reviews.value = data.items
     totalCount.value = data.totalCount
+  } catch (err: any) {
+    console.error(err)
+    toast.error(err.message)
+  }
+}
+
+const deleteReview = async (id: string) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/review/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+    })
+
+    if (!res.ok) {
+      const errorData = await res.json()
+      throw new Error(errorData?.message || errorData?.error || 'An error occured')
+    }
+
+    toast.success('Review deleted successfully')
+
+    await fetchReviews(1, defaultPageSize)
   } catch (err: any) {
     console.error(err)
     toast.error(err.message)
@@ -278,6 +299,7 @@ const submit = async (e: Event) => {
 
           <button
             class="cursor-pointer flex items-center justify-center w-12 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-r-lg hover:border-rose-500/50 hover:bg-rose-500/5 transition-all group/delete mb-3"
+            @click="deleteReview(item.id)"
           >
             <XIcon
               class="w-4 h-4 text-[var(--color-text-dim)] group-hover/delete:text-rose-400 transition-colors"

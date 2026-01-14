@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -87,6 +88,15 @@ export class ReviewController {
     );
 
     return reviews;
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  async deleteReview(@Param('id') id: string, @Req() req: express.Request) {
+    const userId = req.user.sub;
+    const result = await this.reviewService.deleteReview(id, userId);
+
+    return result;
   }
 
   @UseGuards(AuthGuard)

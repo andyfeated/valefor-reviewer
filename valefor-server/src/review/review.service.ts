@@ -30,7 +30,7 @@ export class ReviewService {
   async getReviews(userId: string, page = 1, pageSize = 4) {
     try {
       const items = await this.prismaService.review.findMany({
-        where: { userId },
+        where: { userId, deletedAt: null },
         skip: (page - 1) * pageSize,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
@@ -38,7 +38,7 @@ export class ReviewService {
       });
 
       const totalCount = await this.prismaService.review.count({
-        where: { userId },
+        where: { userId, deletedAt: null },
       });
 
       return {
@@ -129,11 +129,13 @@ export class ReviewService {
 
       await this.createDiffs(review.id, diffsWithValidation);
 
+      console.log('dispatched');
       // Send diffs to LLM asynchronously (no await)
       this.dispatchSendDiffsToLlm(review.id, validDiffs);
 
       return review;
     } catch (err) {
+      console.log('err', err);
       throw new BadRequestException(err.message || 'Failed to create review');
     }
   }
@@ -245,7 +247,7 @@ export class ReviewService {
 
   async getReview(id: string, userId: string) {
     const review = this.prismaService.review.findFirst({
-      where: { id, userId },
+      where: { id, userId, deletedAt: null },
       include: { diffs: true },
     });
 
@@ -298,7 +300,27 @@ export class ReviewService {
         userId,
         pullRequestIid,
         providerProjectId: projectId,
+        deletedAt: null,
       },
+    });
+  }
+
+  async deleteReview(id: string, userId: string) {
+    const review = await this.prismaService.review.findFirst({
+      where: {
+        id,
+        userId,
+        deletedAt: null,
+      },
+    });
+
+    if (!review) {
+      throw new BadRequestException('Review not found');
+    }
+
+    return this.prismaService.review.update({
+      where: { id },
+      data: { deletedAt: new Date() },
     });
   }
 }
