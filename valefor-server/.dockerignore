@@ -1,5 +1,5 @@
 node_modules
-src/prisma/generated/
+src/generated
 test
 .gitignore
 .git
