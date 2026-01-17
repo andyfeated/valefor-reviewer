@@ -1,1 +1,4 @@
 README.notes.md
+.env
+.env.prod
+.env.local
