@@ -5,4 +5,5 @@ test
 .git
 .prettierrc
 .env
+.env.docker
 eslint.config.mjs

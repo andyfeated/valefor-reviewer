@@ -8,7 +8,7 @@ services:
       - '3000:3000'
     env_file:
       # use a different env here so that npx migrate will still work locally
-      - ./valefor-server/.env
+      - ./valefor-server/.env.docker
     environment: 
       - NODE_ENV=development
     volumes:
