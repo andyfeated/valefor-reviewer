@@ -1,3 +1,5 @@
+import { useConfig } from '@/composables/useConfig'
+
 export type ProviderName = 'github' | 'gitlab'
 
 type OAuthConfig = {
@@ -7,19 +9,21 @@ type OAuthConfig = {
   scope: string
 }
 
+const config = useConfig()
+
 export default class OAuthService {
   private readonly providerConfig: Record<ProviderName, OAuthConfig> = {
     gitlab: {
-      clientId: import.meta.env.VITE_GITLAB_CLIENT_ID,
-      oauthUrl: import.meta.env.VITE_GITLAB_OAUTH_URL,
-      scope: import.meta.env.VITE_GITLAB_SCOPES,
-      redirectUri: import.meta.env.VITE_CALLBACK_URL,
+      clientId: config.clientId,
+      oauthUrl: config.oauthUrl,
+      scope: config.scope,
+      redirectUri: config.redirectUri,
     },
     github: {
-      clientId: import.meta.env.VITE_GITLAB_CLIENT_ID,
-      oauthUrl: import.meta.env.VITE_GITLAB_OAUTH_URL,
-      scope: import.meta.env.VITE_GITLAB_SCOPES,
-      redirectUri: import.meta.env.VITE_CALLBACK_URL,
+      clientId: config.clientId,
+      oauthUrl: config.oauthUrl,
+      scope: config.scope,
+      redirectUri: config.redirectUri,
     },
   }
 
