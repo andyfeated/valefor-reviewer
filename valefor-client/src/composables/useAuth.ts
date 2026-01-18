@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { useConfig } from './useConfig'
 
 type User = {
   id: number
@@ -11,6 +12,7 @@ type Provider = {
   provider: string
 }
 
+const { apiUrl } = useConfig()
 const user = ref<User | null>(null)
 const isAuthenticated = ref(false)
 const providers = ref<Provider[]>([])
@@ -20,7 +22,7 @@ export function useAuth() {
     const { provider } = JSON.parse(atob(state))
     const codeVerifer = localStorage.getItem(`${provider}_code_verifier`)
 
-    const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/oauth/login`, {
+    const res = await fetch(`${apiUrl}/auth/oauth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code, state, code_verifier: codeVerifer }),
@@ -41,7 +43,7 @@ export function useAuth() {
   }
 
   async function logout() {
-    const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/logout`, {
+    const res = await fetch(`${apiUrl}/auth/logout`, {
       method: 'POST',
       credentials: 'include',
     })
@@ -57,7 +59,7 @@ export function useAuth() {
 
   async function checkAuth() {
     try {
-      const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/auth/my-profile`, {
+      const res = await fetch(`${apiUrl}/auth/my-profile`, {
         credentials: 'include',
       })
 

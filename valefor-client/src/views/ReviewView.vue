@@ -6,7 +6,9 @@ import CodeDiff from '@/components/CodeDiff.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'vue-sonner'
+import { useConfig } from '@/composables/useConfig'
 
+const { apiUrl } = useConfig()
 const route = useRoute()
 const { id } = route.params
 
@@ -42,7 +44,7 @@ const selectFile = (path) => {
 
 onMounted(async () => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/review/${id}`, {
+    const res = await fetch(`${apiUrl}/review/${id}`, {
       credentials: 'include',
     })
 
@@ -71,7 +73,7 @@ onMounted(async () => {
 })
 
 const subscribeToStatusUpdate = () => {
-  eventSource = new EventSource(`${import.meta.env.VITE_BASE_API_URL}/review/${id}/events`, {
+  eventSource = new EventSource(`${apiUrl}/review/${id}/events`, {
     withCredentials: true,
   })
 

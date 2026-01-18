@@ -11,8 +11,10 @@ import { motion } from 'motion-v'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
+import { useConfig } from '@/composables/useConfig'
 
 const router = useRouter()
+const { apiUrl } = useConfig()
 
 const prUrl = ref<string>('')
 const isAnalyzing = ref<boolean>(false)
@@ -47,13 +49,10 @@ const suggestionsCount = (diffs: any[]) => {
 
 const fetchReviews = async (page = 1, pageSize = defaultPageSize) => {
   try {
-    const res = await fetch(
-      `${import.meta.env.VITE_BASE_API_URL}/review?page=${page}&pageSize=${pageSize}`,
-      {
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
+    const res = await fetch(`${apiUrl}/review?page=${page}&pageSize=${pageSize}`, {
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+    })
 
     if (!res.ok) {
       const errorData = await res.json()
@@ -73,7 +72,7 @@ const fetchReviews = async (page = 1, pageSize = defaultPageSize) => {
 
 const deleteReview = async (id: string) => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/review/${id}`, {
+    const res = await fetch(`${apiUrl}/review/${id}`, {
       method: 'DELETE',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -110,7 +109,7 @@ const submit = async (e: Event) => {
     const url = new URL(prUrl.value)
     const provider = url.host.replace('.com', '')
 
-    const res = await fetch(`${import.meta.env.VITE_BASE_API_URL}/review/${provider}`, {
+    const res = await fetch(`${apiUrl}/review/${provider}`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
